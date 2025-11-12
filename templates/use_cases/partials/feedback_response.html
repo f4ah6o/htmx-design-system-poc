@@ -1,0 +1,8 @@
+{% set color = {
+    'success': 'bg-emerald-50 border-emerald-200 text-emerald-700',
+    'error': 'bg-red-50 border-red-200 text-red-700'
+}.get(level, 'bg-blue-50 border-blue-200 text-blue-700') %}
+<div class="rounded-2xl border px-4 py-3 space-y-1 text-sm {{ color }}">
+    <p class="font-semibold">{{ title }}</p>
+    <p>{{ body }}</p>
+</div>
