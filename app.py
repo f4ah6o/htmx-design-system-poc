@@ -24,6 +24,12 @@ def molecules():
     return render_template('molecules.html')
 
 
+@app.route('/organisms')
+def organisms():
+    """Organismsコンポーネントカタログ"""
+    return render_template('organisms.html')
+
+
 # htmx デモ用APIエンドポイント
 @app.route('/api/demo/message')
 def demo_message():
@@ -127,6 +133,183 @@ def demo_product(product_id):
                 お気に入り
             </button>
         </div>
+    </div>
+    '''
+
+
+@app.route('/api/organisms/modal/<scenario>')
+def organisms_modal_content(scenario):
+    """Organismsモーダルに差し込む部分テンプレート"""
+    modal_content = {
+        'overview': {
+            'badge': 'ハイライト',
+            'title': 'Design System 今週の進捗',
+            'description': 'Atoms/Moleculesレイヤーが完成し、Organismsの実装に着手しました。',
+            'items': [
+                {
+                    'label': 'レイアウトテンプレート',
+                    'value': '4/5 完了',
+                    'note': '基盤となるセクション構造を整備'
+                },
+                {
+                    'label': 'アクセシビリティレビュー',
+                    'value': '進行中',
+                    'note': 'WAI-ARIA属性の棚卸しを実施'
+                },
+                {
+                    'label': 'Storyサンプル',
+                    'value': '8件',
+                    'note': 'ユースケースに紐付いたサンプルを追加'
+                }
+            ]
+        },
+        'release': {
+            'badge': 'Release note',
+            'title': 'v0.3.0 リリース候補',
+            'description': 'Organismsコンポーネントを含むPoC第3弾を今週リリース予定です。',
+            'items': [
+                {
+                    'label': '新機能',
+                    'value': 'モーダル / ナビバー / ステータスパネル',
+                    'note': 'htmx属性付きテンプレートを追加'
+                },
+                {
+                    'label': '改善',
+                    'value': '読み込みインジケーター',
+                    'note': '共通コンポーネント化し、`hx-indicator`で利用可能に'
+                },
+                {
+                    'label': 'デプロイ',
+                    'value': '11/15 予定',
+                    'note': 'PoC用のプレビュー環境に反映'
+                }
+            ]
+        },
+        'feedback': {
+            'badge': 'Feedback',
+            'title': 'ユースケース検証のお願い',
+            'description': 'OrganismsのUI/UXについて、次回レビューまでに確認して欲しい観点をまとめました。',
+            'items': [
+                {
+                    'label': 'レスポンシブ体験',
+                    'value': 'ブレークポイント md / lg',
+                    'note': 'ナビバーのブレークポイント挙動をチェック'
+                },
+                {
+                    'label': '部分更新',
+                    'value': 'hx-swap 動作',
+                    'note': 'モーダル内の差し替えが自然か確認'
+                },
+                {
+                    'label': 'アクセシビリティ',
+                    'value': 'フォーカストラップ',
+                    'note': 'モーダル操作時のキーボード挙動'
+                }
+            ]
+        }
+    }
+
+    content = modal_content.get(scenario, modal_content['overview'])
+
+    items_html = ''.join(
+        f'''
+        <li class="flex items-start gap-4 p-3 rounded-xl border border-gray-100 bg-gray-50">
+            <div>
+                <p class="text-sm font-semibold text-gray-900">{item['label']}</p>
+                <p class="text-xs text-gray-500">{item['note']}</p>
+            </div>
+            <span class="ml-auto text-sm font-semibold text-blue-600">{item['value']}</span>
+        </li>
+        '''
+        for item in content['items']
+    )
+
+    return f'''
+    <div class="space-y-4">
+        <div class="space-y-1">
+            <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                {content['badge']}
+            </span>
+            <h3 class="text-xl font-bold text-gray-900">{content['title']}</h3>
+            <p class="text-sm text-gray-600">{content['description']}</p>
+        </div>
+        <ul class="space-y-3">
+            {items_html}
+        </ul>
+    </div>
+    '''
+
+
+@app.route('/api/organisms/panel/<panel_id>')
+def organisms_panel(panel_id):
+    """Organismsページのステータスパネル用部分更新"""
+    panel_data = {
+        'growth': {
+            'title': '週次成長サマリー',
+            'badge': 'KPI snapshot',
+            'description': '直近7日間の主要KPIと改善提案です。',
+            'metrics': [
+                {'label': 'Signup conversion', 'value': '+12.4%', 'tone': 'text-emerald-600'},
+                {'label': 'Active teams', 'value': '+8.1%', 'tone': 'text-emerald-600'},
+                {'label': 'Churn', 'value': '-2.3%', 'tone': 'text-emerald-600'}
+            ],
+            'notes': ['プロダクト内ツアーの改善がCVRを押し上げています。', '次のスプリントでリテンション向けモーダル導線をA/Bテスト予定。']
+        },
+        'ops': {
+            'title': '運用タスクリスト',
+            'badge': 'Operations',
+            'description': 'リリース前に完了したいアクションアイテム。',
+            'metrics': [
+                {'label': 'アクセシビリティ監査', 'value': '80% 完了', 'tone': 'text-amber-600'},
+                {'label': 'ドキュメント更新', 'value': '5/8 ページ', 'tone': 'text-gray-700'},
+                {'label': 'テストシナリオ', 'value': '12 ケース', 'tone': 'text-gray-700'}
+            ],
+            'notes': ['残タスク: モーダルのフォーカス管理、ナビバーのキーボード操作。', 'Notionで進捗を同期し、レビューコメントを集約。']
+        },
+        'support': {
+            'title': 'サポートインサイト',
+            'badge': 'Support',
+            'description': '直近の問い合わせ傾向と改善ヒント。',
+            'metrics': [
+                {'label': 'お問い合わせ件数', 'value': '42 (-6)', 'tone': 'text-emerald-600'},
+                {'label': '主要カテゴリ', 'value': 'UIカスタム / API', 'tone': 'text-gray-700'},
+                {'label': '平均初回応答', 'value': '1.8h', 'tone': 'text-blue-600'}
+            ],
+            'notes': ['デザインシステムの使い方ガイドをDocsに追加予定。', '動画チュートリアルの要望が複数寄せられています。']
+        }
+    }
+
+    content = panel_data.get(panel_id, panel_data['growth'])
+    metric_html = ''.join(
+        f'''
+        <li class="flex items-center justify-between rounded-xl bg-white/70 px-4 py-3">
+            <span class="text-sm font-medium text-gray-600">{metric['label']}</span>
+            <span class="text-sm font-semibold {metric['tone']}">{metric['value']}</span>
+        </li>
+        '''
+        for metric in content['metrics']
+    )
+
+    notes_html = ''.join(
+        f'<li class="text-sm text-gray-600 leading-relaxed">{note}</li>'
+        for note in content['notes']
+    )
+
+    return f'''
+    <div class="space-y-5">
+        <div class="space-y-1">
+            <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                {content['badge']}
+            </span>
+            <h3 class="text-2xl font-bold text-gray-900">{content['title']}</h3>
+            <p class="text-sm text-gray-600">{content['description']}</p>
+        </div>
+        <ul class="space-y-2">
+            {metric_html}
+        </ul>
+        <ul class="space-y-2 list-disc list-inside">
+            {notes_html}
+        </ul>
     </div>
     '''
 
