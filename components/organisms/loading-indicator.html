@@ -1,0 +1,64 @@
+{#
+  ローディングインジケーターコンポーネント
+  htmxのリクエスト中に自動的に表示される
+
+  パラメータ:
+  - id: DOMに付与する任意のID
+  - variant: インジケーターのバリエーション (デフォルト: "spinner")
+    - "spinner": スピナー
+    - "dots": ドット
+    - "bar": プログレスバー
+  - text: 表示テキスト
+  - class: 追加のCSSクラス
+#}
+
+{% set id = id|default('') %}
+{% set variant = variant|default('spinner') %}
+
+<div
+  {% if id %}id="{{ id }}"{% endif %}
+  class="htmx-indicator {{ class|default('') }}"
+>
+  {% if variant == 'spinner' %}
+    <!-- スピナー -->
+    <div class="flex items-center justify-center space-x-2">
+      <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      {% if text %}
+        <span class="text-sm text-gray-600">{{ text }}</span>
+      {% endif %}
+    </div>
+  {% elif variant == 'dots' %}
+    <!-- ドットアニメーション -->
+    <div class="flex items-center justify-center space-x-2">
+      <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+      <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+      <div class="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+      {% if text %}
+        <span class="ml-2 text-sm text-gray-600">{{ text }}</span>
+      {% endif %}
+    </div>
+  {% elif variant == 'bar' %}
+    <!-- プログレスバー -->
+    <div class="space-y-2">
+      {% if text %}
+        <span class="text-sm text-gray-600">{{ text }}</span>
+      {% endif %}
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 100%;"></div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .htmx-indicator {
+    display: none;
+  }
+  .htmx-request .htmx-indicator,
+  .htmx-request.htmx-indicator {
+    display: flex;
+  }
+</style>

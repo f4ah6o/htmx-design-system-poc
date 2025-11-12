@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Organisms - htmx Design System PoC{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-b from-slate-50 to-slate-100 min-h-screen pb-16">
+    <div class="container mx-auto px-4 py-8 space-y-12">
+        <header class="text-center space-y-4">
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 uppercase tracking-wide">
+                Organisms Layer
+                <span class="h-1.5 w-1.5 rounded-full bg-blue-400"></span>
+                htmx + Alpine.js Showcase
+            </p>
+            <h1 class="text-4xl font-bold text-gray-900">複合コンポーネント（Organisms）</h1>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                モーダルやナビゲーションのような複雑なUIパターンを、テンプレートパーツ＋htmxの属性だけで再利用できるようにしたカタログです。
+            </p>
+        </header>
+
+        <!-- Navigation Component Showcase -->
+        <section class="bg-white rounded-2xl shadow-md p-8 space-y-6">
+            <div class="space-y-3">
+                <p class="text-sm font-semibold text-blue-600">Organism 01</p>
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <h2 class="text-2xl font-bold text-gray-900">レスポンシブナビゲーション</h2>
+                    <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">components/organisms/navbar.html</span>
+                </div>
+                <p class="text-gray-600">
+                    Alpine.jsでモバイルメニューを制御しつつ、現在ページに応じたアクティブスタイルをTailwindで適用しています。
+                    デザインシステムのルートナビゲーションをOrganismとしてカタログ化しました。
+                </p>
+            </div>
+            <div class="border rounded-xl overflow-hidden">
+                {% with brand_text='Design System PoC', current_page='organisms' %}
+                    {% include 'organisms/navbar.html' %}
+                {% endwith %}
+            </div>
+        </section>
+
+        <!-- Modal Component Showcase -->
+        <section class="bg-white rounded-2xl shadow-md p-8 space-y-6" id="modal-demo">
+            <div class="space-y-3">
+                <p class="text-sm font-semibold text-purple-600">Organism 02</p>
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <h2 class="text-2xl font-bold text-gray-900">htmx連携モーダル</h2>
+                    <span class="px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-sm font-medium">components/organisms/modal.html</span>
+                </div>
+                <p class="text-gray-600">
+                    `hx-get`, `hx-target`, `hx-swap="innerHTML"` を組み合わせ、モーダル内のコンテンツのみをサーバーから差し替えます。
+                    `hx-indicator` 属性でローディングインジケーターも連携しています。
+                </p>
+            </div>
+
+            <div class="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-500">読み込みたいシナリオをクリックすると、サーバー側テンプレートがモーダル内に差し込まれます。</p>
+                    <div class="flex flex-wrap gap-4" x-data="{}">
+                        <button
+                            class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            hx-get="/api/organisms/modal/overview"
+                            hx-target="#demo-modal-content"
+                            hx-swap="innerHTML"
+                            hx-indicator="#modal-loading-indicator"
+                            @click="$dispatch('open-modal', { id: 'demo-modal' })"
+                        >
+                            プロジェクト概要
+                        </button>
+                        <button
+                            class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            hx-get="/api/organisms/modal/release"
+                            hx-target="#demo-modal-content"
+                            hx-swap="innerHTML"
+                            hx-indicator="#modal-loading-indicator"
+                            @click="$dispatch('open-modal', { id: 'demo-modal' })"
+                        >
+                            リリースノート
+                        </button>
+                        <button
+                            class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            hx-get="/api/organisms/modal/feedback"
+                            hx-target="#demo-modal-content"
+                            hx-swap="innerHTML"
+                            hx-indicator="#modal-loading-indicator"
+                            @click="$dispatch('open-modal', { id: 'demo-modal' })"
+                        >
+                            フィードバック収集
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 space-y-3">
+                    <h3 class="text-sm font-semibold text-purple-700 uppercase tracking-wide">htmx フロー</h3>
+                    <ol class="space-y-3 text-sm text-gray-600">
+                        <li><span class="font-semibold text-gray-800">1.</span> ボタンの `hx-get` がサーバーへリクエスト</li>
+                        <li><span class="font-semibold text-gray-800">2.</span> レスポンスHTMLを `hx-target="#demo-modal-content"` へ挿入</li>
+                        <li><span class="font-semibold text-gray-800">3.</span> `hx-swap="innerHTML"` でボディのみ差し替え、モーダルは開いたまま</li>
+                        <li><span class="font-semibold text-gray-800">4.</span> リクエスト中は `hx-indicator` でローディング表示</li>
+                    </ol>
+                </div>
+            </div>
+
+            {% set modal_body %}
+                <div id="demo-modal-content" class="space-y-3 text-gray-600">
+                    <p class="text-gray-500">アクションを選択するとここに詳細が表示されます。</p>
+                </div>
+                {% with id='modal-loading-indicator', variant='spinner', text='サーバーからコンテンツを取得しています…', class='justify-center text-sm text-gray-600 gap-3 mt-2' %}
+                    {% include 'organisms/loading-indicator.html' %}
+                {% endwith %}
+            {% endset %}
+            {% with id='demo-modal', title='サーバー連携モーダル', size='lg', body_content=modal_body %}
+                {% include 'organisms/modal.html' %}
+            {% endwith %}
+        </section>
+
+        <!-- Partial Updates & Loading Indicator Showcase -->
+        <section class="bg-white rounded-2xl shadow-md p-8 space-y-6" id="partial-updates">
+            <div class="space-y-3">
+                <p class="text-sm font-semibold text-emerald-600">Organism 03</p>
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <h2 class="text-2xl font-bold text-gray-900">部分更新パネル + インジケーター</h2>
+                    <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-sm font-medium">components/organisms/loading-indicator.html</span>
+                </div>
+                <p class="text-gray-600">
+                    `hx-target="#status-panel"` と `hx-swap="innerHTML"` で右側パネルのみ更新。
+                    `hx-indicator="#panel-indicator"` がローディング状態を視覚化します。
+                </p>
+            </div>
+
+            <div class="grid gap-6 lg:grid-cols-[320px_1fr]">
+                <div class="space-y-3">
+                    <p class="text-xs uppercase text-gray-500 tracking-wide">サーバーから読み込むテーマ</p>
+                    <div class="flex flex-col gap-3">
+                        <button
+                            class="text-left rounded-xl border border-gray-200 px-4 py-3 hover:border-emerald-400 hover:bg-emerald-50"
+                            hx-get="/api/organisms/panel/growth"
+                            hx-target="#status-panel"
+                            hx-swap="innerHTML"
+                            hx-indicator="#panel-indicator"
+                        >
+                            <span class="block text-sm font-semibold text-gray-900">成長指標レポート</span>
+                            <span class="block text-xs text-gray-500">プロダクトKPIのサマリー</span>
+                        </button>
+                        <button
+                            class="text-left rounded-xl border border-gray-200 px-4 py-3 hover:border-emerald-400 hover:bg-emerald-50"
+                            hx-get="/api/organisms/panel/ops"
+                            hx-target="#status-panel"
+                            hx-swap="innerHTML"
+                            hx-indicator="#panel-indicator"
+                        >
+                            <span class="block text-sm font-semibold text-gray-900">運用タスク</span>
+                            <span class="block text-xs text-gray-500">チームアクションアイテム</span>
+                        </button>
+                        <button
+                            class="text-left rounded-xl border border-gray-200 px-4 py-3 hover:border-emerald-400 hover:bg-emerald-50"
+                            hx-get="/api/organisms/panel/support"
+                            hx-target="#status-panel"
+                            hx-swap="innerHTML"
+                            hx-indicator="#panel-indicator"
+                        >
+                            <span class="block text-sm font-semibold text-gray-900">サポートインサイト</span>
+                            <span class="block text-xs text-gray-500">問い合わせトレンド</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative rounded-2xl border border-dashed border-emerald-200 bg-emerald-50/40 p-6">
+                    <div id="status-panel" class="space-y-4 text-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900">右のリクエスト結果領域</h3>
+                        <p class="text-gray-600 text-sm">左のトピックをクリックすると、この領域だけが `hx-swap` で差し替わります。</p>
+                    </div>
+                    {% with id='panel-indicator', variant='dots', text='更新中…', class='absolute bottom-6 right-6 bg-white/80 px-3 py-1.5 rounded-full shadow text-gray-600 items-center gap-2' %}
+                        {% include 'organisms/loading-indicator.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

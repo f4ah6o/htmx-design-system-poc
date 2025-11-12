@@ -1,0 +1,117 @@
+{#
+  モーダルダイアログコンポーネント
+
+  パラメータ:
+  - id: モーダルのID (必須)
+  - title: モーダルのタイトル
+  - size: モーダルのサイズ (デフォルト: "md")
+    - "sm": 小
+    - "md": 中
+    - "lg": 大
+    - "xl": 特大
+  - show_footer: フッターを表示するか (デフォルト: true)
+  - footer_content: フッターのコンテンツ（HTML）
+  - body_content: モーダルボディに表示するHTMLスニペット
+  - class: 追加のCSSクラス
+#}
+
+{% set size = size|default('md') %}
+{% set show_footer = show_footer|default(true) %}
+{% set body_content = body_content|default('') %}
+
+{# サイズ別スタイル #}
+{% if size == 'sm' %}
+  {% set size_class = 'max-w-sm' %}
+{% elif size == 'md' %}
+  {% set size_class = 'max-w-md' %}
+{% elif size == 'lg' %}
+  {% set size_class = 'max-w-2xl' %}
+{% elif size == 'xl' %}
+  {% set size_class = 'max-w-4xl' %}
+{% else %}
+  {% set size_class = 'max-w-md' %}
+{% endif %}
+
+<div
+  id="{{ id }}"
+  class="fixed inset-0 z-50 overflow-y-auto hidden {{ class|default('') }}"
+  aria-labelledby="{{ id }}-title"
+  role="dialog"
+  aria-modal="true"
+  x-data="{ show: false }"
+  x-show="show"
+  x-on:open-modal.window="if ($event.detail.id === '{{ id }}') show = true"
+  x-on:close-modal.window="if ($event.detail.id === '{{ id }}') show = false"
+  @keydown.escape.window="show = false"
+  style="display: none;"
+>
+  <!-- オーバーレイ -->
+  <div
+    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+    x-show="show"
+    x-transition:enter="ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="ease-in duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    @click="show = false"
+  ></div>
+
+  <!-- モーダルコンテンツ -->
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div
+      class="relative bg-white rounded-lg shadow-xl w-full {{ size_class }} transform transition-all"
+      x-show="show"
+      x-transition:enter="ease-out duration-300"
+      x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+      x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+      x-transition:leave="ease-in duration-200"
+      x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+      x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+      @click.stop
+    >
+      <!-- ヘッダー -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200">
+        {% if title %}
+          <h3 id="{{ id }}-title" class="text-xl font-semibold text-gray-900">
+            {{ title }}
+          </h3>
+        {% endif %}
+        <button
+          @click="show = false"
+          class="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg p-1"
+        >
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- ボディ -->
+      <div class="p-6 space-y-4">
+        {% if body_content %}
+          {{ body_content|safe }}
+        {% elif caller %}
+          {{ caller() }}
+        {% endif %}
+      </div>
+
+      <!-- フッター -->
+      {% if show_footer %}
+        <div class="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+          {% if footer_content %}
+            {{ footer_content|safe }}
+          {% else %}
+            <button
+              @click="show = false"
+              class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+            >
+              閉じる
+            </button>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
