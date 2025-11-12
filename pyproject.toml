@@ -1,0 +1,22 @@
+[project]
+name = "htmx-design-system-poc"
+version = "0.1.0"
+description = "Flask-powered design system playground showcasing htmx, Tailwind CSS, and Alpine.js"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "Flask==3.0.0",
+    "python-dotenv==1.0.0",
+]
+
+[project.optional-dependencies]
+dev = []
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
