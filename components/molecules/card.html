@@ -1,0 +1,67 @@
+{#
+  カードコンポーネント
+
+  パラメータ:
+  - title: カードタイトル
+  - description: カードの説明文
+  - image_url: カード画像のURL
+  - footer_content: フッターのコンテンツ（HTML）
+  - variant: カードのバリエーション (デフォルト: "default")
+    - "default": デフォルトカード
+    - "hover": ホバーエフェクト付き
+    - "clickable": クリック可能なカード
+  - hx_get: htmx GET リクエスト先
+  - hx_post: htmx POST リクエスト先
+  - hx_target: htmx ターゲット要素
+  - hx_swap: htmx スワップ方法
+  - href: リンク先URL（clickableの場合）
+  - class: 追加のCSSクラス
+#}
+
+{% set variant = variant|default('default') %}
+
+{# バリエーション別スタイル #}
+{% if variant == 'hover' %}
+  {% set variant_class = 'hover:shadow-lg hover:-translate-y-1 transition-all duration-200' %}
+{% elif variant == 'clickable' %}
+  {% set variant_class = 'cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-200' %}
+{% else %}
+  {% set variant_class = '' %}
+{% endif %}
+
+<div
+  class="bg-white rounded-lg shadow-md overflow-hidden {{ variant_class }} {{ class|default('') }}"
+  {% if hx_get %}hx-get="{{ hx_get }}"{% endif %}
+  {% if hx_post %}hx-post="{{ hx_post }}"{% endif %}
+  {% if hx_target %}hx-target="{{ hx_target }}"{% endif %}
+  {% if hx_swap %}hx-swap="{{ hx_swap }}"{% endif %}
+  {% if variant == 'clickable' and href %}onclick="window.location.href='{{ href }}'"{% endif %}
+>
+  {# 画像 #}
+  {% if image_url %}
+    <div class="aspect-video w-full overflow-hidden bg-gray-200">
+      <img src="{{ image_url }}" alt="{{ title }}" class="w-full h-full object-cover">
+    </div>
+  {% endif %}
+
+  {# コンテンツ #}
+  <div class="p-6">
+    {% if title %}
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ title }}</h3>
+    {% endif %}
+
+    {% if description %}
+      <p class="text-gray-600">{{ description }}</p>
+    {% endif %}
+
+    {# カスタムコンテンツ（スロット） #}
+    {{ caller() if caller else '' }}
+  </div>
+
+  {# フッター #}
+  {% if footer_content %}
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+      {{ footer_content|safe }}
+    </div>
+  {% endif %}
+</div>
