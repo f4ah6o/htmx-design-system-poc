@@ -1,0 +1,22 @@
+{% if not task %}
+<div class="space-y-2">
+    <p class="text-gray-600 text-sm">タスクが選択されていません。</p>
+</div>
+{% else %}
+    {% set meta = status_meta.get(task.status, status_meta['planning']) %}
+    <div class="space-y-4">
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <h3 class="text-2xl font-bold text-gray-900">{{ task.title }}</h3>
+                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ meta.badge_class }}">
+                    {{ meta.label }}
+                </span>
+            </div>
+            <p class="text-sm text-gray-500">Owner: {{ task.owner }}</p>
+        </div>
+        <p class="text-gray-700 leading-relaxed">{{ task.details }}</p>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-gray-600">
+            <p>htmxリクエストでモーダル内部のみを差し替えています。モーダル自体は開いたままで、`hx-target="#use-case-modal-body"` が指している領域だけが更新されます。</p>
+        </div>
+    </div>
+{% endif %}

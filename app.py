@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from uuid import uuid4
 
 app = Flask(__name__)
 
@@ -77,6 +78,70 @@ CATALOG_TEMPLATE_MAP = {
 }
 
 
+STATUS_META = {
+    'planning': {
+        'label': '計画中',
+        'badge_class': 'bg-slate-100 text-slate-700',
+    },
+    'in-progress': {
+        'label': '進行中',
+        'badge_class': 'bg-blue-100 text-blue-700',
+    },
+    'review': {
+        'label': 'レビュー待ち',
+        'badge_class': 'bg-amber-100 text-amber-700',
+    },
+    'done': {
+        'label': '完了',
+        'badge_class': 'bg-emerald-100 text-emerald-700',
+    },
+}
+
+
+USE_CASE_TASKS = [
+    {
+        'id': 'task-roadmap',
+        'title': 'Design System ロードマップアップデート',
+        'owner': 'プロダクト',
+        'status': 'planning',
+        'summary': '次期リリース向けの優先順位付けを整理',
+        'details': 'Atoms/Moleculesの改善要望を集約し、優先順位をつける。',
+    },
+    {
+        'id': 'task-accessibility',
+        'title': 'アクセシビリティ監査',
+        'owner': 'QA',
+        'status': 'in-progress',
+        'summary': 'モーダル/フォームのWAI-ARIA属性レビュー',
+        'details': 'フォームエラーパターンとモーダルのフォーカストラップを確認。',
+    },
+    {
+        'id': 'task-docs',
+        'title': 'カタログドキュメント更新',
+        'owner': 'DesignOps',
+        'status': 'review',
+        'summary': 'Storyサンプルと実装解説を追記',
+        'details': 'Atoms/Organismsのサンプルコードをドキュメント化。',
+    },
+]
+
+
+def render_task_panel(message=None, level='info'):
+    """ユースケースのタスクパネルを描画"""
+    flash = {'message': message, 'level': level} if message else None
+    return render_template(
+        'use_cases/partials/task_panel.html',
+        tasks=USE_CASE_TASKS,
+        status_meta=STATUS_META,
+        flash=flash,
+    )
+
+
+def find_task(task_id):
+    """IDに対応するタスクを返す"""
+    return next((task for task in USE_CASE_TASKS if task['id'] == task_id), None)
+
+
 @app.route('/')
 def index():
     """メインページ"""
@@ -100,6 +165,12 @@ def catalog():
     """コンポーネントカタログのトップページ"""
     default_slug = CATALOG_COMPONENTS[0]['slug'] if CATALOG_COMPONENTS else ''
     return render_template('catalog.html', components=CATALOG_COMPONENTS, default_component=default_slug)
+
+
+@app.route('/use-cases')
+def use_cases():
+    """実践的なユースケースデモ"""
+    return render_template('use-cases.html', tasks=USE_CASE_TASKS, status_meta=STATUS_META)
 
 
 @app.route('/organisms')
@@ -224,6 +295,117 @@ def catalog_component_detail(component_slug):
 
     component_meta = next((c for c in CATALOG_COMPONENTS if c['slug'] == component_slug), None)
     return render_template(template, component=component_meta)
+
+
+@app.route('/api/use-cases/tasks', methods=['POST'])
+def add_use_case_task():
+    """ユースケースのタスクを追加"""
+    title = request.form.get('title', '').strip()
+    owner = request.form.get('owner', 'Team').strip() or 'Team'
+    status_key = request.form.get('status', 'planning')
+    summary = request.form.get('summary', '').strip() or '詳細は後で追記します'
+
+    if not title:
+        return render_task_panel('タスク名を入力してください', 'error'), 400
+
+    new_task = {
+        'id': f"task-{uuid4().hex[:6]}",
+        'title': title,
+        'owner': owner,
+        'status': status_key if status_key in STATUS_META else 'planning',
+        'summary': summary,
+        'details': summary,
+    }
+    USE_CASE_TASKS.insert(0, new_task)
+    return render_task_panel('新しいタスクを追加しました', 'success')
+
+
+@app.route('/api/use-cases/tasks/<task_id>', methods=['DELETE'])
+def delete_use_case_task(task_id):
+    """タスクを削除"""
+    task = find_task(task_id)
+    if not task:
+        return render_task_panel('指定したタスクが見つかりません', 'error'), 404
+
+    USE_CASE_TASKS.remove(task)
+    return render_task_panel('タスクを削除しました', 'info')
+
+
+@app.route('/api/use-cases/tasks/<task_id>/detail')
+def use_case_task_detail(task_id):
+    """タスクの詳細をモーダルに描画"""
+    task = find_task(task_id)
+    if not task:
+        return '<div class="text-red-600">タスクが見つかりません</div>', 404
+
+    return render_template('use_cases/partials/task_detail.html', task=task, status_meta=STATUS_META)
+
+
+@app.route('/api/use-cases/feedback', methods=['POST'])
+def use_case_feedback():
+    """フォーム送信とバリデーション"""
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    message = request.form.get('message', '').strip()
+
+    if not name or not email or not message:
+        return render_template(
+            'use_cases/partials/feedback_response.html',
+            level='error',
+            title='入力エラー',
+            body='すべてのフィールドを入力してください。',
+        ), 400
+
+    if '@' not in email:
+        return render_template(
+            'use_cases/partials/feedback_response.html',
+            level='error',
+            title='メールアドレスが不正です',
+            body='有効なメール形式で入力してください。',
+        ), 400
+
+    if len(message) < 10:
+        return render_template(
+            'use_cases/partials/feedback_response.html',
+            level='error',
+            title='メッセージが短すぎます',
+            body='詳細なフィードバックを10文字以上で入力してください。',
+        ), 422
+
+    return render_template(
+        'use_cases/partials/feedback_response.html',
+        level='success',
+        title='送信が完了しました',
+        body=f'{name} さん、フィードバックありがとうございます。',
+    )
+
+
+@app.route('/api/use-cases/error-demo')
+def use_case_error_demo():
+    """エラーハンドリングのデモ"""
+    mode = request.args.get('mode', 'success')
+    if mode == 'server-error':
+        return render_template(
+            'use_cases/partials/error_message.html',
+            level='error',
+            title='500エラーを捕捉しました',
+            body='APIからエラーレスポンスが返ってきた場合もコンポーネント内でメッセージを表示できます。',
+        ), 500
+
+    if mode == 'timeout':
+        return render_template(
+            'use_cases/partials/error_message.html',
+            level='warning',
+            title='タイムアウトを想定',
+            body='リトライやフォールバックUIをここに表示します。',
+        ), 504
+
+    return render_template(
+        'use_cases/partials/error_message.html',
+        level='success',
+        title='正常レスポンス',
+        body='APIレスポンスが200の場合は通常の成功メッセージを表示します。',
+    )
 
 
 @app.route('/api/organisms/modal/<scenario>')

@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Use Cases - htmx Design System PoC{% endblock %}
+
+{% block content %}
+<div class="bg-slate-100">
+    <div class="container mx-auto px-4 py-10 space-y-12">
+        <header class="space-y-4 text-center">
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 uppercase tracking-[0.3em]">
+                Practical Scenarios
+                <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                htmx + Design System
+            </p>
+            <h1 class="text-4xl font-bold text-gray-900">実践ユースケース集</h1>
+            <p class="max-w-3xl mx-auto text-gray-600">
+                動的リスト更新、フォーム送信、モーダル詳細表示、エラーハンドリングなど実務に近いフローを
+                htmxとデザインシステムのコンポーネントでどう表現するかを示します。
+            </p>
+        </header>
+
+        <section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] bg-white rounded-3xl shadow-sm p-8">
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-semibold text-blue-600">Use Case 01</p>
+                    <h2 class="text-2xl font-bold text-gray-900">バックログの動的更新</h2>
+                    <p class="text-gray-600">タスクを追加・削除し、モーダルで詳細を確認。`hx-target`でリスト部分のみを差し替えます。</p>
+                </div>
+
+                <form
+                    class="bg-slate-50 rounded-2xl p-5 space-y-4"
+                    hx-post="/api/use-cases/tasks"
+                    hx-target="#task-panel"
+                    hx-swap="outerHTML"
+                    hx-indicator="#task-panel-indicator"
+                >
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">タスク名</label>
+                        <input type="text" name="title" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500" placeholder="例: モーダルUX改善" required>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">担当</label>
+                            <input type="text" name="owner" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500" placeholder="DesignOps">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ステータス</label>
+                            <select name="status" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500">
+                                {% for key, meta in status_meta.items() %}
+                                    <option value="{{ key }}">{{ meta.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">概要</label>
+                        <textarea name="summary" rows="3" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500" placeholder="タスクの背景や期待成果"></textarea>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        {% with text='タスクを追加', variant='primary' %}
+                            {% include 'atoms/button.html' %}
+                        {% endwith %}
+                        {% with id='task-panel-indicator', variant='spinner', text='更新中...', class='text-sm text-gray-600 gap-2' %}
+                            {% include 'organisms/loading-indicator.html' %}
+                        {% endwith %}
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                {% include 'use_cases/partials/task_panel.html' with context %}
+            </div>
+        </section>
+
+        <section class="grid gap-8 lg:grid-cols-2">
+            <div class="bg-white rounded-3xl shadow-sm p-8 space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-semibold text-purple-600">Use Case 02</p>
+                    <h2 class="text-2xl font-bold text-gray-900">フォーム送信とバリデーション</h2>
+                    <p class="text-gray-600">Server-sideで入力値を検証し、エラー/成功メッセージを同じ領域に差し替えます。</p>
+                </div>
+
+                <form
+                    class="space-y-4"
+                    hx-post="/api/use-cases/feedback"
+                    hx-target="#feedback-result"
+                    hx-swap="innerHTML"
+                    hx-indicator="#feedback-indicator"
+                >
+                    {% with label='お名前', name='name', placeholder='山田太郎', required=true %}
+                        {% include 'molecules/form-group.html' %}
+                    {% endwith %}
+                    {% with label='メールアドレス', name='email', type='email', placeholder='you@example.com', required=true %}
+                        {% include 'molecules/form-group.html' %}
+                    {% endwith %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">フィードバック</label>
+                        <textarea name="message" rows="4" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-500" placeholder="10文字以上で入力してください" required></textarea>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        {% with text='送信', variant='primary' %}
+                            {% include 'atoms/button.html' %}
+                        {% endwith %}
+                        {% with id='feedback-indicator', variant='dots', text='送信中...', class='text-sm text-gray-500 gap-2' %}
+                            {% include 'organisms/loading-indicator.html' %}
+                        {% endwith %}
+                    </div>
+                </form>
+
+                <div id="feedback-result" class="rounded-2xl border border-dashed border-purple-200 bg-purple-50/50 p-4 text-sm text-gray-500">
+                    フォームを送信するとここに結果が表示されます。
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-sm p-8 space-y-6">
+                <div class="space-y-2">
+                    <p class="text-sm font-semibold text-rose-600">Use Case 03</p>
+                    <h2 class="text-2xl font-bold text-gray-900">エラーハンドリングパターン</h2>
+                    <p class="text-gray-600">HTTPステータスに応じたUIを描画し、500/504などのケースでもユーザーに状況を伝えます。</p>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                    <button
+                        class="px-4 py-2 rounded-lg border border-gray-200 hover:border-emerald-400"
+                        hx-get="/api/use-cases/error-demo?mode=success"
+                        hx-target="#error-demo-panel"
+                        hx-swap="innerHTML"
+                        hx-indicator="#error-demo-indicator"
+                    >
+                        正常レスポンス
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-lg border border-gray-200 hover:border-amber-400"
+                        hx-get="/api/use-cases/error-demo?mode=timeout"
+                        hx-target="#error-demo-panel"
+                        hx-swap="innerHTML"
+                        hx-indicator="#error-demo-indicator"
+                    >
+                        タイムアウト想定
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-lg border border-red-200 text-red-600 hover:border-red-400"
+                        hx-get="/api/use-cases/error-demo?mode=server-error"
+                        hx-target="#error-demo-panel"
+                        hx-swap="innerHTML"
+                        hx-indicator="#error-demo-indicator"
+                    >
+                        サーバーエラー再現
+                    </button>
+                </div>
+
+                <div id="error-demo-panel" class="rounded-2xl border border-dashed border-rose-200 bg-rose-50/60 p-4 text-sm text-gray-600">
+                    ボタンを押すとレスポンス内容とHTTPステータスに応じたUIが挿入されます。
+                </div>
+                {% with id='error-demo-indicator', variant='spinner', text='処理中...', class='text-sm text-gray-500 gap-2' %}
+                    {% include 'organisms/loading-indicator.html' %}
+                {% endwith %}
+            </div>
+        </section>
+    </div>
+</div>
+
+{% set modal_body %}
+    <div id="use-case-modal-body" class="space-y-4 text-gray-700">
+        <p class="text-gray-500">タスクカードの「詳細を見る」を押すと内容がここに表示されます。</p>
+    </div>
+    {% with id='use-case-modal-indicator', variant='spinner', text='ロード中...', class='justify-center text-sm text-gray-600 gap-2 mt-2' %}
+        {% include 'organisms/loading-indicator.html' %}
+    {% endwith %}
+{% endset %}
+{% with id='use-case-modal', title='タスク詳細', size='lg', body_content=modal_body %}
+    {% include 'organisms/modal.html' %}
+{% endwith %}
+{% endblock %}
