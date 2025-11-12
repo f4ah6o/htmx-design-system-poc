@@ -1,0 +1,56 @@
+{% set snippet %}
+{% raw %}
+{% with label='ユーザー名', name='username', placeholder='山田太郎', required=true %}
+    {% include 'molecules/form-group.html' %}
+{% endwith %}
+{% with label='メールアドレス', name='email', type='email', placeholder='you@example.com', help_text='通知を受け取るメールアドレス' %}
+    {% include 'molecules/form-group.html' %}
+{% endwith %}
+{% with label='ユーザーID', name='user_id', value='ab', error='3文字以上で入力してください' %}
+    {% include 'molecules/form-group.html' %}
+{% endwith %}
+{% endraw %}
+{% endset %}
+
+<div class="space-y-8" x-data="{ showCode: false }">
+    <header class="space-y-2">
+        <p class="text-xs uppercase tracking-wide text-purple-600">{{ component.category }} / {{ component.title }}</p>
+        <h2 class="text-3xl font-bold text-gray-900">フォームグループ</h2>
+        <p class="text-gray-600">ラベル、入力、補足文/エラーをまとめて扱えるMolecule。Atomsに比べた状態管理が容易です。</p>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="space-y-4">
+            <p class="text-sm font-semibold text-gray-500">プレビュー</p>
+            <form class="space-y-4">
+                {% with label='ユーザー名', name='catalog-username', placeholder='山田太郎', required=true %}
+                    {% include 'molecules/form-group.html' %}
+                {% endwith %}
+                {% with label='メールアドレス', name='catalog-email', type='email', placeholder='you@example.com', help_text='通知を受け取るメールアドレス' %}
+                    {% include 'molecules/form-group.html' %}
+                {% endwith %}
+                {% with label='ユーザーID', name='catalog-id', value='ab', error='3文字以上で入力してください' %}
+                    {% include 'molecules/form-group.html' %}
+                {% endwith %}
+            </form>
+        </div>
+        <div class="bg-purple-50 rounded-2xl p-5 space-y-3">
+            <p class="font-semibold text-gray-800">バリエーション一覧</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li><span class="font-semibold text-gray-900">help_text:</span> エラーが無いときのみ補足を表示。</li>
+                <li><span class="font-semibold text-gray-900">error:</span> 入力直後にエラーテキストと赤ボーダーを自動適用。</li>
+                <li><span class="font-semibold text-gray-900">htmx:</span> 内部でAtoms/inputを利用しているため、hx-*属性をそのまま渡せます。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+        <button class="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-gray-700" @click="showCode = !showCode">
+            <span>コードスニペット</span>
+            <span x-text="showCode ? '−' : '+'"></span>
+        </button>
+        <div x-show="showCode" x-transition class="bg-slate-900 text-slate-50 text-sm">
+            <pre class="overflow-x-auto p-5"><code>{{ snippet|trim|e }}</code></pre>
+        </div>
+    </div>
+</div>

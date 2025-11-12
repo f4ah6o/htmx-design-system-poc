@@ -1,0 +1,97 @@
+{% set snippet %}
+{% raw %}
+{% set modal_body %}
+    <div id="catalog-modal-content">
+        <p class="text-gray-500">アクションを選択するとここに差し込まれます。</p>
+    </div>
+{% endset %}
+{% with id='catalog-modal', title='サンプルモーダル', size='lg', body_content=modal_body %}
+    {% include 'organisms/modal.html' %}
+{% endwith %}
+<button
+    class="px-4 py-2 bg-blue-600 text-white rounded-lg"
+    hx-get="/api/organisms/modal/overview"
+    hx-target="#catalog-modal-content"
+    hx-swap="innerHTML"
+    @click="$dispatch('open-modal', { id: 'catalog-modal' })"
+>
+    概要を見る
+</button>
+{% endraw %}
+{% endset %}
+
+<div class="space-y-8" x-data="{ showCode: false }">
+    <header class="space-y-2">
+        <p class="text-xs uppercase tracking-wide text-emerald-600">{{ component.category }} / {{ component.title }}</p>
+        <h2 class="text-3xl font-bold text-gray-900">htmx対応モーダル</h2>
+        <p class="text-gray-600">`open-modal`イベントで開閉し、`hx-target`をモーダル内部の領域に設定して差し替えます。</p>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div class="space-y-4">
+            <p class="text-sm font-semibold text-gray-500">プレビュー</p>
+            <div class="flex flex-wrap gap-3">
+                <button
+                    class="px-4 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600"
+                    hx-get="/api/organisms/modal/overview"
+                    hx-target="#catalog-modal-body"
+                    hx-swap="innerHTML"
+                    hx-indicator="#catalog-modal-indicator"
+                    @click="$dispatch('open-modal', { id: 'catalog-modal' })"
+                >
+                    プロジェクト概要
+                </button>
+                <button
+                    class="px-4 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600"
+                    hx-get="/api/organisms/modal/release"
+                    hx-target="#catalog-modal-body"
+                    hx-swap="innerHTML"
+                    hx-indicator="#catalog-modal-indicator"
+                    @click="$dispatch('open-modal', { id: 'catalog-modal' })"
+                >
+                    リリースノート
+                </button>
+                <button
+                    class="px-4 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600"
+                    hx-get="/api/organisms/modal/feedback"
+                    hx-target="#catalog-modal-body"
+                    hx-swap="innerHTML"
+                    hx-indicator="#catalog-modal-indicator"
+                    @click="$dispatch('open-modal', { id: 'catalog-modal' })"
+                >
+                    フィードバック
+                </button>
+            </div>
+            {% set modal_body %}
+                <div id="catalog-modal-body" class="space-y-3 text-gray-600">
+                    <p class="text-gray-500">左のアクションを選ぶとコンテンツを読み込みます。</p>
+                </div>
+                {% with id='catalog-modal-indicator', variant='spinner', text='読み込み中', class='justify-center text-sm text-gray-600 gap-2 mt-2' %}
+                    {% include 'organisms/loading-indicator.html' %}
+                {% endwith %}
+            {% endset %}
+            {% with id='catalog-modal', title='サーバー連携モーダル', size='lg', body_content=modal_body %}
+                {% include 'organisms/modal.html' %}
+            {% endwith %}
+        </div>
+        <div class="bg-emerald-50 rounded-2xl p-5 space-y-3">
+            <p class="font-semibold text-gray-800">バリエーション一覧</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li><span class="font-semibold text-gray-900">size:</span> sm/md/lg/xlの4段階。</li>
+                <li><span class="font-semibold text-gray-900">body_content / caller:</span> ボディをスロットとして挿入可能。</li>
+                <li><span class="font-semibold text-gray-900">show_footer:</span> フッターを非表示にしてカスタムアクションを作成。</li>
+                <li><span class="font-semibold text-gray-900">htmx:</span> モーダルを閉じずに`hx-target`エリアのみを更新。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+        <button class="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-gray-700" @click="showCode = !showCode">
+            <span>コードスニペット</span>
+            <span x-text="showCode ? '−' : '+'"></span>
+        </button>
+        <div x-show="showCode" x-transition class="bg-slate-900 text-slate-50 text-sm">
+            <pre class="overflow-x-auto p-5"><code>{{ snippet|trim|e }}</code></pre>
+        </div>
+    </div>
+</div>
