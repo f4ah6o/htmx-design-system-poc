@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Atoms - htmx Design System PoC{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Atoms コンポーネント</h1>
+        <p class="text-gray-600 mb-8">デザインシステムの最小単位であるAtomsコンポーネントのカタログ</p>
+
+        <!-- ボタンコンポーネント -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200">ボタン</h2>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">バリエーション</h3>
+                <div class="flex flex-wrap gap-4">
+                    {% set text = "Primary" %}
+                    {% set variant = "primary" %}
+                    {% include 'atoms/button.html' with context %}
+
+                    {% set text = "Secondary" %}
+                    {% set variant = "secondary" %}
+                    {% include 'atoms/button.html' with context %}
+
+                    {% set text = "Danger" %}
+                    {% set variant = "danger" %}
+                    {% include 'atoms/button.html' with context %}
+
+                    {% set text = "Outline" %}
+                    {% set variant = "outline" %}
+                    {% include 'atoms/button.html' with context %}
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">サイズ</h3>
+                <div class="flex flex-wrap items-center gap-4">
+                    {% set text = "Small" %}
+                    {% set variant = "primary" %}
+                    {% set size = "sm" %}
+                    {% include 'atoms/button.html' with context %}
+
+                    {% set text = "Medium" %}
+                    {% set size = "md" %}
+                    {% include 'atoms/button.html' with context %}
+
+                    {% set text = "Large" %}
+                    {% set size = "lg" %}
+                    {% include 'atoms/button.html' with context %}
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">htmx デモ</h3>
+                <div class="space-y-4">
+                    <div>
+                        {% set text = "メッセージを読み込む" %}
+                        {% set variant = "primary" %}
+                        {% set size = "md" %}
+                        {% set hx_get = "/api/demo/message" %}
+                        {% set hx_target = "#message-output" %}
+                        {% set hx_swap = "innerHTML" %}
+                        {% include 'atoms/button.html' with context %}
+                    </div>
+                    <div id="message-output" class="p-4 bg-gray-50 rounded-md min-h-[60px]">
+                        <p class="text-gray-500 italic">ボタンをクリックしてメッセージを読み込んでください</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 入力フィールドコンポーネント -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200">入力フィールド</h2>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">基本</h3>
+                <div class="space-y-4 max-w-md">
+                    {% set name = "text-input" %}
+                    {% set placeholder = "テキストを入力してください" %}
+                    {% include 'atoms/input.html' with context %}
+
+                    {% set name = "email-input" %}
+                    {% set type = "email" %}
+                    {% set placeholder = "email@example.com" %}
+                    {% include 'atoms/input.html' with context %}
+
+                    {% set name = "password-input" %}
+                    {% set type = "password" %}
+                    {% set placeholder = "パスワード" %}
+                    {% include 'atoms/input.html' with context %}
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">状態</h3>
+                <div class="space-y-4 max-w-md">
+                    {% set name = "disabled-input" %}
+                    {% set value = "無効化された入力フィールド" %}
+                    {% set disabled = true %}
+                    {% include 'atoms/input.html' with context %}
+
+                    {% set name = "error-input" %}
+                    {% set error = "このフィールドは必須です" %}
+                    {% set disabled = false %}
+                    {% set value = "" %}
+                    {% include 'atoms/input.html' with context %}
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">htmx デモ（リアルタイムバリデーション）</h3>
+                <div class="space-y-4 max-w-md">
+                    {% set name = "username" %}
+                    {% set placeholder = "ユーザー名を入力" %}
+                    {% set hx_post = "/api/validate/username" %}
+                    {% set hx_trigger = "keyup changed delay:500ms" %}
+                    {% set hx_target = "#validation-result" %}
+                    {% set error = "" %}
+                    {% include 'atoms/input.html' with context %}
+                    <div id="validation-result" class="text-sm"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ラベルコンポーネント -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200">ラベル</h2>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">基本</h3>
+                <div class="space-y-4 max-w-md">
+                    {% set text = "ユーザー名" %}
+                    {% set for = "username-field" %}
+                    {% include 'atoms/label.html' with context %}
+                    {% set name = "username-field" %}
+                    {% set placeholder = "太郎" %}
+                    {% set error = "" %}
+                    {% set hx_post = "" %}
+                    {% set hx_trigger = "" %}
+                    {% set hx_target = "" %}
+                    {% include 'atoms/input.html' with context %}
+
+                    {% set text = "メールアドレス" %}
+                    {% set for = "email-field" %}
+                    {% set required = true %}
+                    {% include 'atoms/label.html' with context %}
+                    {% set name = "email-field" %}
+                    {% set type = "email" %}
+                    {% set placeholder = "taro@example.com" %}
+                    {% include 'atoms/input.html' with context %}
+                </div>
+            </div>
+        </section>
+
+        <!-- テキストコンポーネント -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200">テキスト</h2>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">バリエーション</h3>
+                <div class="space-y-4">
+                    {% set content = "見出しテキスト" %}
+                    {% set variant = "heading" %}
+                    {% include 'atoms/text.html' with context %}
+
+                    {% set content = "小見出しテキスト" %}
+                    {% set variant = "subheading" %}
+                    {% include 'atoms/text.html' with context %}
+
+                    {% set content = "本文テキスト。これは標準の段落テキストです。" %}
+                    {% set variant = "body" %}
+                    {% include 'atoms/text.html' with context %}
+
+                    {% set content = "キャプションテキスト（小さめのテキスト）" %}
+                    {% set variant = "caption" %}
+                    {% include 'atoms/text.html' with context %}
+
+                    {% set content = "エラーメッセージ" %}
+                    {% set variant = "error" %}
+                    {% include 'atoms/text.html' with context %}
+
+                    {% set content = "成功メッセージ" %}
+                    {% set variant = "success" %}
+                    {% include 'atoms/text.html' with context %}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

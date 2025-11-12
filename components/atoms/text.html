@@ -1,0 +1,35 @@
+{#
+  テキストコンポーネント
+
+  パラメータ:
+  - content: テキスト内容 (必須)
+  - variant: テキストのバリエーション (デフォルト: "body")
+    - "heading": 見出し
+    - "subheading": 小見出し
+    - "body": 本文
+    - "caption": キャプション
+    - "error": エラーメッセージ
+    - "success": 成功メッセージ
+  - class: 追加のCSSクラス
+#}
+
+{% set variant = variant|default('body') %}
+
+{# バリエーション別スタイル #}
+{% if variant == 'heading' %}
+  {% set variant_class = 'text-2xl font-bold text-gray-900' %}
+{% elif variant == 'subheading' %}
+  {% set variant_class = 'text-xl font-semibold text-gray-800' %}
+{% elif variant == 'body' %}
+  {% set variant_class = 'text-base text-gray-700' %}
+{% elif variant == 'caption' %}
+  {% set variant_class = 'text-sm text-gray-500' %}
+{% elif variant == 'error' %}
+  {% set variant_class = 'text-sm text-red-600' %}
+{% elif variant == 'success' %}
+  {% set variant_class = 'text-sm text-green-600' %}
+{% endif %}
+
+<p class="{{ variant_class }} {{ class|default('') }}">
+  {{ content }}
+</p>

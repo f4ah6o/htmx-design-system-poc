@@ -1,0 +1,19 @@
+{#
+  ラベルコンポーネント
+
+  パラメータ:
+  - text: ラベルテキスト (必須)
+  - for: 関連するinput要素のid
+  - required: 必須マーク表示フラグ
+  - class: 追加のCSSクラス
+#}
+
+<label
+  {% if for %}for="{{ for }}"{% endif %}
+  class="block text-sm font-medium text-gray-700 mb-1 {{ class|default('') }}"
+>
+  {{ text }}
+  {% if required %}
+    <span class="text-red-500">*</span>
+  {% endif %}
+</label>
