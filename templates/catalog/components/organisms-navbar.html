@@ -1,0 +1,43 @@
+{% set snippet %}
+{% raw %}
+{% with brand_text='Design System', current_page='catalog' %}
+    {% include 'organisms/navbar.html' %}
+{% endwith %}
+{% endraw %}
+{% endset %}
+
+<div class="space-y-8" x-data="{ showCode: false }">
+    <header class="space-y-2">
+        <p class="text-xs uppercase tracking-wide text-emerald-600">{{ component.category }} / {{ component.title }}</p>
+        <h2 class="text-3xl font-bold text-gray-900">レスポンシブナビゲーション</h2>
+        <p class="text-gray-600">Alpine.jsでモバイルメニューを制御し、現在ページに応じたアクティブスタイルを自動的に付与します。</p>
+    </header>
+
+    <div class="space-y-4">
+        <p class="text-sm font-semibold text-gray-500">プレビュー</p>
+        <div class="border rounded-2xl overflow-hidden shadow-sm">
+            {% with brand_text='Design System', current_page='catalog' %}
+                {% include 'organisms/navbar.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="bg-emerald-50 rounded-2xl p-5 space-y-3">
+        <p class="font-semibold text-gray-800">バリエーション一覧</p>
+        <ul class="space-y-2 text-sm text-gray-600">
+            <li><span class="font-semibold text-gray-900">brand_text / brand_url:</span> ロゴテキストとリンク先を差し替え可能。</li>
+            <li><span class="font-semibold text-gray-900">current_page:</span> ホバー/アクティブ状態をTailwindクラスで切り替え。</li>
+            <li><span class="font-semibold text-gray-900">モバイル:</span> Alpineの`mobileMenuOpen`でハンバーガーメニューを制御。</li>
+        </ul>
+    </div>
+
+    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+        <button class="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-gray-700" @click="showCode = !showCode">
+            <span>コードスニペット</span>
+            <span x-text="showCode ? '−' : '+'"></span>
+        </button>
+        <div x-show="showCode" x-transition class="bg-slate-900 text-slate-50 text-sm">
+            <pre class="overflow-x-auto p-5"><code>{{ snippet|trim|e }}</code></pre>
+        </div>
+    </div>
+</div>

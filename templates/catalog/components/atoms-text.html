@@ -1,0 +1,69 @@
+{% set snippet %}
+{% raw %}
+{% with content='headingスタイル', variant='heading' %}
+    {% include 'atoms/text.html' %}
+{% endwith %}
+{% with content='subheadingスタイル', variant='subheading' %}
+    {% include 'atoms/text.html' %}
+{% endwith %}
+{% with content='本文テキスト', variant='body' %}
+    {% include 'atoms/text.html' %}
+{% endwith %}
+{% with content='補足説明', variant='caption' %}
+    {% include 'atoms/text.html' %}
+{% endwith %}
+{% endraw %}
+{% endset %}
+
+<div class="space-y-8" x-data="{ showCode: false }">
+    <header class="space-y-2">
+        <p class="text-xs uppercase tracking-wide text-blue-600">{{ component.category }} / {{ component.title }}</p>
+        <h2 class="text-3xl font-bold text-gray-900">テキストスケール</h2>
+        <p class="text-gray-600">ヘッダーからキャプション、状態メッセージまで一貫したタイポグラフィを提供します。</p>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="space-y-4">
+            <p class="text-sm font-semibold text-gray-500">プレビュー</p>
+            <div class="space-y-3">
+                {% with content='Heading / L', variant='heading' %}
+                    {% include 'atoms/text.html' %}
+                {% endwith %}
+                {% with content='Subheading', variant='subheading' %}
+                    {% include 'atoms/text.html' %}
+                {% endwith %}
+                {% with content='Body text for paragraphs', variant='body' %}
+                    {% include 'atoms/text.html' %}
+                {% endwith %}
+                {% with content='Caption text', variant='caption' %}
+                    {% include 'atoms/text.html' %}
+                {% endwith %}
+                {% with content='エラーメッセージ', variant='error' %}
+                    {% include 'atoms/text.html' %}
+                {% endwith %}
+                {% with content='成功メッセージ', variant='success' %}
+                    {% include 'atoms/text.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-5 space-y-3">
+            <p class="font-semibold text-gray-800">バリエーション一覧</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li><span class="font-semibold text-gray-900">heading / subheading:</span> 見出しやセクションタイトル用。</li>
+                <li><span class="font-semibold text-gray-900">body:</span> 標準の段落・説明テキスト。</li>
+                <li><span class="font-semibold text-gray-900">caption:</span> 補足情報やツールチップに適した小さい文字。</li>
+                <li><span class="font-semibold text-gray-900">error / success:</span> 状態メッセージのカラーリングを統一。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+        <button class="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-gray-700" @click="showCode = !showCode">
+            <span>コードスニペット</span>
+            <span x-text="showCode ? '−' : '+'"></span>
+        </button>
+        <div x-show="showCode" x-transition class="bg-slate-900 text-slate-50 text-sm">
+            <pre class="overflow-x-auto p-5"><code>{{ snippet|trim|e }}</code></pre>
+        </div>
+    </div>
+</div>

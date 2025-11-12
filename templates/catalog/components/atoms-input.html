@@ -1,0 +1,73 @@
+{% set snippet %}
+{% raw %}
+{% with name='username', placeholder='ユーザー名', required=true %}
+    {% include 'atoms/input.html' %}
+{% endwith %}
+{% with name='email', type='email', placeholder='you@example.com' %}
+    {% include 'atoms/input.html' %}
+{% endwith %}
+<div class="space-y-2" hx-target="#input-feedback">
+    {% with name='username', hx_post='/api/validate/username', hx_target='#input-feedback', hx_trigger='blur', placeholder='htmxでバリデーション' %}
+        {% include 'atoms/input.html' %}
+    {% endwith %}
+    <div id="input-feedback" class="text-sm text-gray-500"></div>
+</div>
+{% endraw %}
+{% endset %}
+
+<div class="space-y-8" x-data="{ showCode: false }">
+    <header class="space-y-2">
+        <p class="text-xs uppercase tracking-wide text-blue-600">{{ component.category }} / {{ component.title }}</p>
+        <h2 class="text-3xl font-bold text-gray-900">フォーム入力の状態管理</h2>
+        <p class="text-gray-600">エラー表示やhtmxによる非同期バリデーションを組み込みやすいAtomです。</p>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="space-y-4">
+            <p class="text-sm font-semibold text-gray-500">プレビュー</p>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">デフォルト</p>
+                    {% with name='username', placeholder='山田太郎', required=true %}
+                        {% include 'atoms/input.html' %}
+                    {% endwith %}
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">エラー状態</p>
+                    {% with name='username', placeholder='ab', error='3文字以上で入力してください' %}
+                        {% include 'atoms/input.html' %}
+                    {% endwith %}
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">htmxバリデーション</p>
+                    <div hx-target="#input-validation-feedback" hx-indicator="#input-validation-indicator">
+                        {% with name='username', placeholder='非同期でチェック', hx_post='/api/validate/username', hx_target='#input-validation-feedback', hx_trigger='keyup changed delay:500ms' %}
+                            {% include 'atoms/input.html' %}
+                        {% endwith %}
+                        <div class="text-sm text-gray-500 min-h-[24px] flex items-center" id="input-validation-feedback"></div>
+                        <div id="input-validation-indicator" class="text-xs text-blue-600 htmx-indicator">チェック中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-5 space-y-3">
+            <p class="font-semibold text-gray-800">バリエーション一覧</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li><span class="font-semibold text-gray-900">type:</span> text/email/password など任意のタイプに対応。</li>
+                <li><span class="font-semibold text-gray-900">state:</span> errorが指定されると赤枠＋テキストを表示。</li>
+                <li><span class="font-semibold text-gray-900">htmx:</span> hx-get/hx-post/hx-trigger/hx-targetを直接指定可能。</li>
+                <li><span class="font-semibold text-gray-900">disabled:</span> 利用不可状態でもTailwindのトークンで整形。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+        <button class="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-gray-700" @click="showCode = !showCode">
+            <span>コードスニペット</span>
+            <span x-text="showCode ? '−' : '+'"></span>
+        </button>
+        <div x-show="showCode" x-transition class="bg-slate-900 text-slate-50 text-sm">
+            <pre class="overflow-x-auto p-5"><code>{{ snippet|trim|e }}</code></pre>
+        </div>
+    </div>
+</div>

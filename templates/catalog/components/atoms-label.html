@@ -1,0 +1,60 @@
+{% set snippet %}
+{% raw %}
+{% with text='ユーザー名', required=true, for='username' %}
+    {% include 'atoms/label.html' %}
+{% endwith %}
+{% with text='任意項目', class='text-gray-500' %}
+    {% include 'atoms/label.html' %}
+{% endwith %}
+{% endraw %}
+{% endset %}
+
+<div class="space-y-8" x-data="{ showCode: false }">
+    <header class="space-y-2">
+        <p class="text-xs uppercase tracking-wide text-blue-600">{{ component.category }} / {{ component.title }}</p>
+        <h2 class="text-3xl font-bold text-gray-900">アクセシブルなラベル</h2>
+        <p class="text-gray-600">`for`属性や必須マークを簡潔に制御し、フォーム要素と組み合わせて利用できます。</p>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="space-y-4">
+            <p class="text-sm font-semibold text-gray-500">プレビュー</p>
+            <div class="space-y-4">
+                <div>
+                    {% with text='ユーザー名', required=true, for='catalog-username' %}
+                        {% include 'atoms/label.html' %}
+                    {% endwith %}
+                    {% with name='catalog-username', placeholder='山田太郎' %}
+                        {% include 'atoms/input.html' %}
+                    {% endwith %}
+                </div>
+                <div>
+                    {% with text='任意項目', class='text-gray-500' %}
+                        {% include 'atoms/label.html' %}
+                    {% endwith %}
+                    {% with name='catalog-optional', placeholder='オプション' %}
+                        {% include 'atoms/input.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-5 space-y-3">
+            <p class="font-semibold text-gray-800">バリエーション一覧</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li><span class="font-semibold text-gray-900">required:</span> trueで`*`を表示。</li>
+                <li><span class="font-semibold text-gray-900">for:</span> フォーム要素のidと紐付け、スクリーンリーダー対応。</li>
+                <li><span class="font-semibold text-gray-900">class:</span> Tailwindクラスを拡張してラベルの表現を調整。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+        <button class="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-gray-700" @click="showCode = !showCode">
+            <span>コードスニペット</span>
+            <span x-text="showCode ? '−' : '+'"></span>
+        </button>
+        <div x-show="showCode" x-transition class="bg-slate-900 text-slate-50 text-sm">
+            <pre class="overflow-x-auto p-5"><code>{{ snippet|trim|e }}</code></pre>
+        </div>
+    </div>
+</div>

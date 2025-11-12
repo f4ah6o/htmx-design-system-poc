@@ -6,6 +6,77 @@ app = Flask(__name__)
 app.jinja_loader.searchpath.append('components')
 
 
+CATALOG_COMPONENTS = [
+    {
+        'slug': 'atoms-button',
+        'title': 'Button',
+        'category': 'Atoms',
+        'summary': 'Tailwindとhtmx向けの汎用ボタン',
+        'template': 'catalog/components/atoms-button.html'
+    },
+    {
+        'slug': 'atoms-input',
+        'title': 'Input',
+        'category': 'Atoms',
+        'summary': 'バリデーションやhtmxイベント対応の入力欄',
+        'template': 'catalog/components/atoms-input.html'
+    },
+    {
+        'slug': 'atoms-label',
+        'title': 'Label',
+        'category': 'Atoms',
+        'summary': '必須マークにも対応したテキストラベル',
+        'template': 'catalog/components/atoms-label.html'
+    },
+    {
+        'slug': 'atoms-text',
+        'title': 'Text',
+        'category': 'Atoms',
+        'summary': 'バリエーション豊富なテキストスタイル',
+        'template': 'catalog/components/atoms-text.html'
+    },
+    {
+        'slug': 'molecules-form-group',
+        'title': 'Form Group',
+        'category': 'Molecules',
+        'summary': 'ラベル＋入力＋ヘルプ/エラーをまとめたフォームブロック',
+        'template': 'catalog/components/molecules-form-group.html'
+    },
+    {
+        'slug': 'molecules-card',
+        'title': 'Card',
+        'category': 'Molecules',
+        'summary': '画像やアクションを含む情報カード',
+        'template': 'catalog/components/molecules-card.html'
+    },
+    {
+        'slug': 'organisms-navbar',
+        'title': 'Navbar',
+        'category': 'Organisms',
+        'summary': 'レスポンシブナビゲーションバー',
+        'template': 'catalog/components/organisms-navbar.html'
+    },
+    {
+        'slug': 'organisms-modal',
+        'title': 'Modal',
+        'category': 'Organisms',
+        'summary': 'htmxでコンテンツを差し替えるモーダル',
+        'template': 'catalog/components/organisms-modal.html'
+    },
+    {
+        'slug': 'organisms-loading-indicator',
+        'title': 'Loading Indicator',
+        'category': 'Organisms',
+        'summary': 'hx-indicator向けローディング表示',
+        'template': 'catalog/components/organisms-loading-indicator.html'
+    }
+]
+
+CATALOG_TEMPLATE_MAP = {
+    component['slug']: component['template'] for component in CATALOG_COMPONENTS
+}
+
+
 @app.route('/')
 def index():
     """メインページ"""
@@ -22,6 +93,13 @@ def atoms():
 def molecules():
     """Moleculesコンポーネントカタログ"""
     return render_template('molecules.html')
+
+
+@app.route('/catalog')
+def catalog():
+    """コンポーネントカタログのトップページ"""
+    default_slug = CATALOG_COMPONENTS[0]['slug'] if CATALOG_COMPONENTS else ''
+    return render_template('catalog.html', components=CATALOG_COMPONENTS, default_component=default_slug)
 
 
 @app.route('/organisms')
@@ -135,6 +213,17 @@ def demo_product(product_id):
         </div>
     </div>
     '''
+
+
+@app.route('/api/catalog/<component_slug>')
+def catalog_component_detail(component_slug):
+    """特定コンポーネントのデモ/スニペットを返す"""
+    template = CATALOG_TEMPLATE_MAP.get(component_slug)
+    if not template:
+        return '<div class="p-6 text-red-600">コンポーネントが見つかりません</div>', 404
+
+    component_meta = next((c for c in CATALOG_COMPONENTS if c['slug'] == component_slug), None)
+    return render_template(template, component=component_meta)
 
 
 @app.route('/api/organisms/modal/<scenario>')

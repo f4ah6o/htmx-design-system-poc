@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Component Catalog - htmx Design System PoC{% endblock %}
+
+{% block content %}
+<div class="bg-slate-950/5 py-10 min-h-screen">
+    <div class="container mx-auto px-4 space-y-10">
+        <header class="max-w-4xl space-y-4">
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 uppercase tracking-widest">
+                Component Catalog
+                <span class="h-1.5 w-1.5 rounded-full bg-blue-400"></span>
+                Live Playground
+            </p>
+            <h1 class="text-4xl font-extrabold text-gray-900">コンポーネントカタログ</h1>
+            <p class="text-lg text-gray-600">
+                Atoms / Molecules / Organisms の全コンポーネントを1つの画面で試し、コードスニペットを確認できます。
+                左のリストから対象を選ぶと、右にデモとバリエーションが表示されます。
+            </p>
+        </header>
+
+        <div class="grid gap-8 lg:grid-cols-[320px_1fr]">
+            <aside
+                class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5"
+                x-data="{ active: '{{ default_component }}' }"
+            >
+                <div class="space-y-6">
+                    {% for category, items in components|groupby('category') %}
+                        <div class="space-y-2">
+                            <p class="text-xs uppercase tracking-wide text-gray-400">{{ category }}</p>
+                            <div class="space-y-2">
+                                {% for item in items %}
+                                    <button
+                                        class="w-full text-left px-4 py-3 rounded-xl border transition focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        :class="active === '{{ item.slug }}' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-transparent text-gray-600 hover:border-gray-200 hover:bg-gray-50'"
+                                        hx-get="/api/catalog/{{ item.slug }}"
+                                        hx-target="#catalog-detail"
+                                        hx-swap="innerHTML"
+                                        hx-indicator="#catalog-detail-indicator"
+                                        @click="active = '{{ item.slug }}'"
+                                    >
+                                        <p class="text-sm font-semibold">{{ item.title }}</p>
+                                        <p class="text-xs text-gray-500">{{ item.summary }}</p>
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </aside>
+
+            <div class="relative">
+                <div
+                    id="catalog-detail"
+                    class="bg-white rounded-3xl shadow-lg border border-slate-100 p-8 min-h-[520px]"
+                    hx-get="/api/catalog/{{ default_component }}"
+                    hx-trigger="load"
+                    hx-target="#catalog-detail"
+                    hx-swap="innerHTML"
+                    hx-indicator="#catalog-detail-indicator"
+                >
+                    <div class="flex items-center gap-3 text-gray-500">
+                        <svg class="w-5 h-5 animate-spin text-blue-500" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" />
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        <p>コンポーネントを読み込み中...</p>
+                    </div>
+                </div>
+
+                {% with id='catalog-detail-indicator', variant='dots', text='Loading component…', class='absolute top-6 right-6 bg-white/90 px-4 py-1.5 rounded-full shadow items-center gap-2 text-gray-600' %}
+                    {% include 'organisms/loading-indicator.html' %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -52,6 +52,13 @@
           >
             Organisms
           </a>
+          <a
+            href="/catalog"
+            class="px-3 py-2 rounded-md text-sm font-medium transition
+              {% if current_page == 'catalog' %}bg-blue-100 text-blue-700{% else %}text-gray-700 hover:bg-gray-100{% endif %}"
+          >
+            Catalog
+          </a>
         </div>
       </div>
 
@@ -100,6 +107,13 @@
           {% if current_page == 'organisms' %}bg-blue-100 text-blue-700{% else %}text-gray-700 hover:bg-gray-100{% endif %}"
       >
         Organisms
+      </a>
+      <a
+        href="/catalog"
+        class="block px-3 py-2 rounded-md text-base font-medium transition
+          {% if current_page == 'catalog' %}bg-blue-100 text-blue-700{% else %}text-gray-700 hover:bg-gray-100{% endif %}"
+      >
+        Catalog
       </a>
     </div>
   </div>
