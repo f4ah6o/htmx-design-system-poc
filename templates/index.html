@@ -1,12 +1,36 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>htmx Design System PoC</title>
-</head>
-<body>
-    <h1>htmx Design System PoC</h1>
-    <p>プロジェクト基盤のセットアップが完了しました。</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}ホーム - htmx Design System PoC{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">htmx Design System PoC</h1>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <p class="text-lg text-gray-700 mb-4">プロジェクト基盤のセットアップが完了しました。</p>
+
+            <div class="space-y-2">
+                <h2 class="text-xl font-semibold text-gray-800">統合されたライブラリ:</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-600">
+                    <li>htmx 2.0.3 - HTML属性でAJAX、WebSocket等を実現</li>
+                    <li>Tailwind CSS - ユーティリティファーストCSSフレームワーク</li>
+                    <li>Alpine.js 3.14.1 - 軽量なJavaScriptフレームワーク</li>
+                </ul>
+            </div>
+
+            <!-- Alpine.js デモ -->
+            <div class="mt-6 p-4 bg-blue-50 rounded-md" x-data="{ open: false }">
+                <button
+                    @click="open = !open"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                >
+                    Alpine.js デモ (クリック)
+                </button>
+                <p x-show="open" x-transition class="mt-4 text-gray-700">
+                    Alpine.js が正常に動作しています！
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
