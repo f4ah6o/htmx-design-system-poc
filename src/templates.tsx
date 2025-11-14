@@ -1,5 +1,6 @@
 import { html, raw } from 'hono/html';
 import type { FC } from 'hono/jsx';
+import { CSS_STYLES } from './styles';
 
 // ベースレイアウト
 export const Layout: FC<{ title?: string; children?: any }> = ({ title = 'htmx Design System PoC', children }) => {
@@ -11,7 +12,7 @@ export const Layout: FC<{ title?: string; children?: any }> = ({ title = 'htmx D
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>{title}</title>
 
-        <script src="https://cdn.tailwindcss.com"></script>
+        <style dangerouslySetInnerHTML={{ __html: CSS_STYLES }}></style>
         <script src="https://unpkg.com/htmx.org@2.0.3"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
       </head>
