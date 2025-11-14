@@ -1,46 +1,52 @@
 # htmx Design System PoC
 
-Server-rendered design system playground that combines Flask, Tailwind CSS, Alpine.js, and htmx. The project demonstrates how to structure reusable HTML components (Atoms → Molecules → Organisms), expose them through an interactive catalog, and showcase practical htmx-powered workflows.
+Server-rendered design system playground that combines Hono, Cloudflare Workers, Tailwind CSS, Alpine.js, and htmx. The project demonstrates how to structure reusable HTML components (Atoms → Molecules → Organisms), expose them through an interactive catalog, and showcase practical htmx-powered workflows.
 
 ## Features
 - **Component catalogs**: Dedicated pages for Atoms, Molecules, Organisms, and an aggregated `/catalog` explorer that streams live snippets into the detail panel via `hx-get`/`hx-swap`.
 - **Practical use cases**: `/use-cases` illustrates backlog management, modal details, form validation, and error-handling flows driven by htmx.
-- **Reusable partials**: Components live under `components/` and can be included across templates with a consistent API.
-- **API demos**: Flask endpoints under `/api/*` respond with HTML fragments optimized for htmx swaps.
+- **Edge-first architecture**: Powered by Hono and Cloudflare Workers for fast, globally distributed responses.
+- **API demos**: Hono endpoints under `/api/*` respond with HTML fragments optimized for htmx swaps.
 
 ## Stack
-- Python 3.11+
-- Flask 3.0
-- htmx 2.0.3 (CDN)
-- Alpine.js 3.14 (CDN)
-- Tailwind CSS (CDN)
+- **Hono** 4.6+ - Fast, lightweight web framework for the Edge
+- **Cloudflare Workers** - Serverless edge computing platform
+- **TypeScript** 5.7+ - Type-safe development
+- **htmx** 2.0.3 (CDN) - High-power tools for HTML
+- **Alpine.js** 3.14 (CDN) - Minimal JavaScript framework
+- **Tailwind CSS** (CDN) - Utility-first CSS framework
 
 ## Getting Started
-1. **Install dependencies** (recommended: virtual environment)
+1. **Install dependencies**
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
+   npm install
    ```
+
 2. **Run the development server**
    ```bash
-   flask --app app.py run --debug
+   npm run dev
    ```
-3. Visit `http://127.0.0.1:5000` and browse the catalog/use-case pages.
+
+3. Visit `http://localhost:8787` and browse the catalog/use-case pages.
 
 ### Helpful Commands
-- `python3 -m py_compile app.py` – quick syntax check
-- `FLASK_DEBUG=1 flask --app app.py run` – auto-reload on template/code changes
+- `npm run dev` – start local development server with hot reload
+- `npm run deploy` – deploy to Cloudflare Workers
+- `wrangler dev` – alternative way to start dev server
 
 ## Project Layout
 ```
 htmx-design-system-poc/
-├── app.py                     # Flask routes + demo APIs
-├── components/                # Reusable Jinja partials (atoms/molecules/organisms)
-├── templates/                 # Page templates + catalog/use-case partials
-├── static/                    # (Optional) assets bucket
+├── src/
+│   ├── index.tsx              # Hono app with routes + API endpoints
+│   ├── templates.tsx          # JSX components for page layouts
+│   └── data.ts                # Data models and constants
+├── components/                # Legacy HTML component files (reference)
+├── templates/                 # Legacy Jinja templates (reference)
 ├── docs/                      # Guides (component usage, best practices, architecture)
-├── requirements.txt
+├── package.json
+├── tsconfig.json
+├── wrangler.toml              # Cloudflare Workers configuration
 └── PLAN.md                    # Original exploration notes
 ```
 
