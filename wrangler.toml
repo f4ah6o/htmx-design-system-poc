@@ -8,4 +8,5 @@ workers_dev = true
 
 # Production settings
 [env.production]
+name = "htmx-design-system"
 workers_dev = false
