@@ -25,10 +25,10 @@
   {# ラベル #}
   {% set text = label %}
   {% set for = id %}
-  {% include 'atoms/label.html' with context %}
+  {% include 'atoms/label.html' %}
 
   {# 入力フィールド #}
-  {% include 'atoms/input.html' with context %}
+  {% include 'atoms/input.html' %}
 
   {# ヘルプテキスト #}
   {% if help_text and not error %}

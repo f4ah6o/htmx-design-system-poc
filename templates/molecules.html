@@ -19,7 +19,7 @@
                     {% set name = "username" %}
                     {% set placeholder = "太郎" %}
                     {% set required = true %}
-                    {% include 'molecules/form-group.html' with context %}
+                    {% include 'molecules/form-group.html' %}
 
                     {% set label = "メールアドレス" %}
                     {% set name = "email" %}
@@ -27,7 +27,7 @@
                     {% set placeholder = "taro@example.com" %}
                     {% set required = true %}
                     {% set help_text = "有効なメールアドレスを入力してください" %}
-                    {% include 'molecules/form-group.html' with context %}
+                    {% include 'molecules/form-group.html' %}
 
                     {% set label = "パスワード" %}
                     {% set name = "password" %}
@@ -35,7 +35,7 @@
                     {% set placeholder = "8文字以上" %}
                     {% set required = true %}
                     {% set help_text = "パスワードは8文字以上で入力してください" %}
-                    {% include 'molecules/form-group.html' with context %}
+                    {% include 'molecules/form-group.html' %}
                 </div>
             </div>
 
@@ -48,7 +48,7 @@
                     {% set error = "ユーザー名は3文字以上である必要があります" %}
                     {% set required = true %}
                     {% set help_text = "" %}
-                    {% include 'molecules/form-group.html' with context %}
+                    {% include 'molecules/form-group.html' %}
                 </div>
             </div>
 
@@ -62,13 +62,13 @@
                         {% set required = true %}
                         {% set error = "" %}
                         {% set help_text = "" %}
-                        {% include 'molecules/form-group.html' with context %}
+                        {% include 'molecules/form-group.html' %}
 
                         {% set label = "メッセージ" %}
                         {% set name = "message" %}
                         {% set placeholder = "メッセージを入力してください" %}
                         {% set required = true %}
-                        {% include 'molecules/form-group.html' with context %}
+                        {% include 'molecules/form-group.html' %}
 
                         <div>
                             {% set text = "送信" %}
@@ -78,7 +78,7 @@
                             {% set hx_post = "/api/demo/submit-form" %}
                             {% set hx_target = "#form-result" %}
                             {% set hx_swap = "innerHTML" %}
-                            {% include 'atoms/button.html' with context %}
+                            {% include 'atoms/button.html' %}
                         </div>
                     </form>
 
@@ -99,18 +99,18 @@
                     {% set title = "カードタイトル" %}
                     {% set description = "これはカードの説明文です。カードは情報をグループ化して表示するのに適しています。" %}
                     {% set variant = "default" %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
 
                     {% set title = "画像付きカード" %}
                     {% set description = "画像を含むカードコンポーネントです。" %}
                     {% set image_url = "https://via.placeholder.com/400x300/4F46E5/ffffff?text=Sample+Image" %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
 
                     {% set title = "ホバーエフェクト" %}
                     {% set description = "マウスオーバーでエフェクトが適用されます。" %}
                     {% set variant = "hover" %}
                     {% set image_url = "" %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
                 </div>
             </div>
 
@@ -122,12 +122,12 @@
                     {% set variant = "default" %}
                     {% set text_button = "詳細を見る" %}
                     {% set footer_content = '<button class="ds-btn ds-btn-primary ds-btn-md">詳細を見る</button>' %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
 
                     {% set title = "複数アクション" %}
                     {% set description = "複数のアクションボタンを配置することもできます。" %}
                     {% set footer_content = '<div class="flex gap-3"><button class="ds-btn ds-btn-primary ds-btn-sm">承認</button><button class="ds-btn ds-btn-secondary ds-btn-sm">キャンセル</button></div>' %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
                 </div>
             </div>
 
@@ -141,19 +141,19 @@
                     {% set hx_target = "#product-detail" %}
                     {% set hx_swap = "innerHTML" %}
                     {% set image_url = "https://via.placeholder.com/400x300/3B82F6/ffffff?text=Product+A" %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
 
                     {% set title = "商品 B" %}
                     {% set description = "クリックして商品詳細を読み込む" %}
                     {% set hx_get = "/api/demo/product/b" %}
                     {% set image_url = "https://via.placeholder.com/400x300/8B5CF6/ffffff?text=Product+B" %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
 
                     {% set title = "商品 C" %}
                     {% set description = "クリックして商品詳細を読み込む" %}
                     {% set hx_get = "/api/demo/product/c" %}
                     {% set image_url = "https://via.placeholder.com/400x300/10B981/ffffff?text=Product+C" %}
-                    {% include 'molecules/card.html' with context %}
+                    {% include 'molecules/card.html' %}
                 </div>
 
                 <div id="product-detail" class="mt-6 p-6 bg-surface-muted rounded-lg min-h-[120px]">

@@ -17,19 +17,19 @@
                 <div class="flex flex-wrap gap-4">
                     {% set text = "Primary" %}
                     {% set variant = "primary" %}
-                    {% include 'atoms/button.html' with context %}
+                    {% include 'atoms/button.html' %}
 
                     {% set text = "Secondary" %}
                     {% set variant = "secondary" %}
-                    {% include 'atoms/button.html' with context %}
+                    {% include 'atoms/button.html' %}
 
                     {% set text = "Danger" %}
                     {% set variant = "danger" %}
-                    {% include 'atoms/button.html' with context %}
+                    {% include 'atoms/button.html' %}
 
                     {% set text = "Outline" %}
                     {% set variant = "outline" %}
-                    {% include 'atoms/button.html' with context %}
+                    {% include 'atoms/button.html' %}
                 </div>
             </div>
 
@@ -39,15 +39,15 @@
                     {% set text = "Small" %}
                     {% set variant = "primary" %}
                     {% set size = "sm" %}
-                    {% include 'atoms/button.html' with context %}
+                    {% include 'atoms/button.html' %}
 
                     {% set text = "Medium" %}
                     {% set size = "md" %}
-                    {% include 'atoms/button.html' with context %}
+                    {% include 'atoms/button.html' %}
 
                     {% set text = "Large" %}
                     {% set size = "lg" %}
-                    {% include 'atoms/button.html' with context %}
+                    {% include 'atoms/button.html' %}
                 </div>
             </div>
 
@@ -61,7 +61,7 @@
                         {% set hx_get = "/api/demo/message" %}
                         {% set hx_target = "#message-output" %}
                         {% set hx_swap = "innerHTML" %}
-                        {% include 'atoms/button.html' with context %}
+                        {% include 'atoms/button.html' %}
                     </div>
                     <div id="message-output" class="p-4 bg-surface-muted rounded-md min-h-[60px]">
                         <p class="text-neutral-500 italic">ボタンをクリックしてメッセージを読み込んでください</p>
@@ -79,17 +79,17 @@
                 <div class="space-y-4 max-w-md">
                     {% set name = "text-input" %}
                     {% set placeholder = "テキストを入力してください" %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
 
                     {% set name = "email-input" %}
                     {% set type = "email" %}
                     {% set placeholder = "email@example.com" %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
 
                     {% set name = "password-input" %}
                     {% set type = "password" %}
                     {% set placeholder = "パスワード" %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
                 </div>
             </div>
 
@@ -99,13 +99,13 @@
                     {% set name = "disabled-input" %}
                     {% set value = "無効化された入力フィールド" %}
                     {% set disabled = true %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
 
                     {% set name = "error-input" %}
                     {% set error = "このフィールドは必須です" %}
                     {% set disabled = false %}
                     {% set value = "" %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
                 </div>
             </div>
 
@@ -118,7 +118,7 @@
                     {% set hx_trigger = "keyup changed delay:500ms" %}
                     {% set hx_target = "#validation-result" %}
                     {% set error = "" %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
                     <div id="validation-result" class="text-sm"></div>
                 </div>
             </div>
@@ -133,23 +133,23 @@
                 <div class="space-y-4 max-w-md">
                     {% set text = "ユーザー名" %}
                     {% set for = "username-field" %}
-                    {% include 'atoms/label.html' with context %}
+                    {% include 'atoms/label.html' %}
                     {% set name = "username-field" %}
                     {% set placeholder = "太郎" %}
                     {% set error = "" %}
                     {% set hx_post = "" %}
                     {% set hx_trigger = "" %}
                     {% set hx_target = "" %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
 
                     {% set text = "メールアドレス" %}
                     {% set for = "email-field" %}
                     {% set required = true %}
-                    {% include 'atoms/label.html' with context %}
+                    {% include 'atoms/label.html' %}
                     {% set name = "email-field" %}
                     {% set type = "email" %}
                     {% set placeholder = "taro@example.com" %}
-                    {% include 'atoms/input.html' with context %}
+                    {% include 'atoms/input.html' %}
                 </div>
             </div>
         </section>
@@ -163,27 +163,27 @@
                 <div class="space-y-4">
                     {% set content = "見出しテキスト" %}
                     {% set variant = "heading" %}
-                    {% include 'atoms/text.html' with context %}
+                    {% include 'atoms/text.html' %}
 
                     {% set content = "小見出しテキスト" %}
                     {% set variant = "subheading" %}
-                    {% include 'atoms/text.html' with context %}
+                    {% include 'atoms/text.html' %}
 
                     {% set content = "本文テキスト。これは標準の段落テキストです。" %}
                     {% set variant = "body" %}
-                    {% include 'atoms/text.html' with context %}
+                    {% include 'atoms/text.html' %}
 
                     {% set content = "キャプションテキスト（小さめのテキスト）" %}
                     {% set variant = "caption" %}
-                    {% include 'atoms/text.html' with context %}
+                    {% include 'atoms/text.html' %}
 
                     {% set content = "エラーメッセージ" %}
                     {% set variant = "error" %}
-                    {% include 'atoms/text.html' with context %}
+                    {% include 'atoms/text.html' %}
 
                     {% set content = "成功メッセージ" %}
                     {% set variant = "success" %}
-                    {% include 'atoms/text.html' with context %}
+                    {% include 'atoms/text.html' %}
                 </div>
             </div>
         </section>

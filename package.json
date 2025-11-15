@@ -5,18 +5,19 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "NODE_ENV=production tsx src/server.ts",
+    "generate": "tsx scripts/build-assets.ts",
     "build:css": "tailwindcss -i ./static/src/tokens.css -o ./static/css/app.css --minify",
     "watch:css": "tailwindcss -i ./static/src/tokens.css -o ./static/css/app.css --watch",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hono/node-server": "^1.10.4",
-    "hono": "^4.4.6",
-    "nunjucks": "^3.2.4"
+    "hono": "^4.4.6"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "@types/nunjucks": "^3.2.6",
+    "nunjucks": "^3.2.4",
     "tailwindcss": "^3.4.13",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
