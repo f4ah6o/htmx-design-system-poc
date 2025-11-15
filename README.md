@@ -3,39 +3,56 @@
 Flask-based playground that demonstrates how to compose Atoms → Molecules → Organisms, power them with htmx, and document real-world workflows (dynamic lists, form validation, modal details, error handling).
 
 ## Stack
-- Python 3.11+
-- Flask 3
-- Tailwind CSS / Alpine.js / htmx via CDN
+- Node.js 18+
+- Hono (Edge-friendly web server) + Nunjucks templating
+- Tailwind CSS tokens compiled into a single CSS asset
+- Alpine.js / htmx via CDN
 
-## Getting Started (uv-first)
-1. **Install [uv](https://docs.astral.sh/uv/)**
+## Getting Started
+1. Install dependencies
    ```bash
-   curl -Ls https://astral.sh/uv/install.sh | sh
+   npm install
    ```
-2. **Sync dependencies** (creates `.venv/` automatically)
+2. Build the token-driven stylesheet (run again after editing `templates/`, `components/` or `static/src/tokens.css`)
    ```bash
-   uv sync
+   npm run build:css
    ```
-3. **Run the dev server**
+3. Start the Hono dev server (auto-reloads on file save)
    ```bash
-   uv run flask --app app.py run --debug
+   npm run dev
    ```
-4. Visit `http://127.0.0.1:5000` and explore `/atoms`, `/molecules`, `/organisms`, `/catalog`, `/use-cases`.
+4. Visit `http://localhost:5173` to browse `/`, `/atoms`, `/molecules`, and trigger the htmx demos.
 
-> Need a legacy `requirements.txt`? Regenerate it with `uv export --format requirements.txt --no-hashes -o requirements.txt`.
+### Production start
+
+```bash
+npm run start
+```
+
+Set `PORT` if you need a different bind port.
+
+## Styling (Tailwind Tokens)
+Design tokens live in `tailwind.config.js` and are compiled from `static/src/tokens.css` into `static/css/app.css`. Run the Tailwind CLI locally whenever you change markup or tokens:
+
+```bash
+npm install          # once
+npm run build:css    # single build
+npm run watch:css    # rebuild on save
+```
+
+`ds-*` classes (buttons, inputs, cards, panels, etc.) are defined via `@layer components` so HTML can stay compact while htmx swaps only attributes/classes.
 
 ## Helpful Commands
-- `uv run python -m py_compile app.py` – syntax check
-- `FLASK_DEBUG=1 uv run flask --app app.py run` – auto reload during development
-- `uv sync --dev` – include optional dev dependencies (none yet, but hooks are ready)
+- `npm run watch:css` – Tailwind watch mode
+- `npm run typecheck` – TypeScript compilation check
+- `npm run dev` – Start Hono server with auto-reload via `tsx`
 
 ## Project Layout
 ```
 .
-├── app.py                  # Flask routes + htmx demo endpoints
-├── components/             # Atoms / Molecules / Organisms Jinja partials
+├── src/server.ts           # Hono entry point + htmx API endpoints
+├── components/             # Atoms / Molecules partials rendered via Nunjucks
 ├── templates/              # Page templates (catalog, use-cases, etc.)
-├── pyproject.toml          # uv/PEP 621 project definition
-├── uv.lock                 # Locked dependency graph
-└── requirements.txt        # Auto-exported for compatibility
+├── static/src/tokens.css   # Tailwind token definitions + ds-* classes
+└── static/css/app.css      # Compiled stylesheet (generated)
 ```

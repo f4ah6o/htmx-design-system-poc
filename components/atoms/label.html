@@ -10,10 +10,10 @@
 
 <label
   {% if for %}for="{{ for }}"{% endif %}
-  class="block text-sm font-medium text-gray-700 mb-1 {{ class|default('') }}"
+  class="ds-field-label {{ class|default('') }}"
 >
   {{ text }}
   {% if required %}
-    <span class="text-red-500">*</span>
+    <span class="text-intent-danger">*</span>
   {% endif %}
 </label>

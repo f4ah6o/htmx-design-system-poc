@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  body {
+    @apply bg-surface-muted text-neutral-700 font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand-200 text-neutral-800;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-neutral-800 font-semibold;
+  }
+
+  a {
+    @apply text-brand-600 underline-offset-4 transition-colors hover:text-brand-700;
+  }
+}
+
+@layer components {
+  .ds-section-shell {
+    @apply min-h-screen bg-surface-muted;
+  }
+
+  .ds-panel {
+    @apply bg-surface-base border border-surface-border rounded-lg shadow-card;
+  }
+
+  .ds-heading-subtle {
+    @apply uppercase tracking-wide text-label-sm text-neutral-500;
+  }
+
+  .ds-btn {
+    @apply inline-flex items-center justify-center font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-500 focus-visible:ring-offset-surface-base disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .ds-btn-primary {
+    @apply bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800;
+  }
+
+  .ds-btn-secondary {
+    @apply bg-neutral-600 text-white hover:bg-neutral-700 active:bg-neutral-800;
+  }
+
+  .ds-btn-danger {
+    @apply bg-intent-danger text-white hover:bg-red-600 active:bg-red-700;
+  }
+
+  .ds-btn-outline {
+    @apply border border-surface-border bg-transparent text-neutral-700 hover:bg-surface-muted;
+  }
+
+  .ds-btn-sm {
+    @apply px-3 py-1.5 text-body-sm;
+  }
+
+  .ds-btn-md {
+    @apply px-4 py-2 text-body-md;
+  }
+
+  .ds-btn-lg {
+    @apply px-6 py-3 text-title-sm;
+  }
+
+  .ds-field-label {
+    @apply block text-neutral-600 text-label-sm font-medium mb-1;
+  }
+
+  .ds-input {
+    @apply w-full rounded-md border border-surface-border bg-surface-base px-3 py-2 text-body-md text-neutral-800 placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1 focus-visible:ring-offset-surface-base;
+  }
+
+  .ds-input-error {
+    @apply border-intent-danger focus-visible:ring-intent-danger;
+  }
+
+  .ds-helper-text {
+    @apply mt-1 text-label-sm text-neutral-500;
+  }
+
+  .ds-form-group {
+    @apply space-y-1.5;
+  }
+
+  .ds-card {
+    @apply bg-surface-base border border-surface-border rounded-lg shadow-card overflow-hidden;
+  }
+
+  .ds-card-content {
+    @apply p-6 space-y-3;
+  }
+
+  .ds-card-footer {
+    @apply px-6 py-4 bg-surface-muted border-t border-surface-border;
+  }
+
+  .ds-card-hover {
+    @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .ds-card-clickable {
+    @apply cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .ds-tag {
+    @apply inline-flex items-center rounded-full bg-surface-muted text-label-sm px-3 py-1 text-neutral-600;
+  }
+
+  .ds-callout {
+    @apply rounded-lg border px-4 py-3 text-body-md shadow-sm;
+  }
+
+  .ds-callout-success {
+    @apply border-intent-success/30 bg-intent-success/10 text-intent-success;
+  }
+
+  .ds-callout-danger {
+    @apply border-intent-danger/30 bg-intent-danger/10 text-intent-danger;
+  }
+
+  .ds-callout-info {
+    @apply border-brand-200 bg-brand-50 text-brand-700;
+  }
+
+  .ds-text-success {
+    @apply text-intent-success;
+  }
+
+  .ds-text-danger {
+    @apply text-intent-danger;
+  }
+
+  .ds-pill {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-label-sm font-medium;
+  }
+
+  .ds-pill-available {
+    @apply bg-brand-50 text-brand-700;
+  }
+
+  .ds-pill-low {
+    @apply bg-accent-100 text-accent-600;
+  }
+
+  .ds-pill-out {
+    @apply bg-neutral-100 text-neutral-600;
+  }
+}

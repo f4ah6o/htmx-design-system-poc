@@ -22,15 +22,15 @@
 
 {# バリエーション別スタイル #}
 {% if variant == 'hover' %}
-  {% set variant_class = 'hover:shadow-lg hover:-translate-y-1 transition-all duration-200' %}
+  {% set variant_class = 'ds-card-hover' %}
 {% elif variant == 'clickable' %}
-  {% set variant_class = 'cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-200' %}
+  {% set variant_class = 'ds-card-clickable' %}
 {% else %}
   {% set variant_class = '' %}
 {% endif %}
 
 <div
-  class="bg-white rounded-lg shadow-md overflow-hidden {{ variant_class }} {{ class|default('') }}"
+  class="ds-card {{ variant_class }} {{ class|default('') }}"
   {% if hx_get %}hx-get="{{ hx_get }}"{% endif %}
   {% if hx_post %}hx-post="{{ hx_post }}"{% endif %}
   {% if hx_target %}hx-target="{{ hx_target }}"{% endif %}
@@ -39,19 +39,19 @@
 >
   {# 画像 #}
   {% if image_url %}
-    <div class="aspect-video w-full overflow-hidden bg-gray-200">
+    <div class="aspect-video w-full overflow-hidden bg-neutral-100">
       <img src="{{ image_url }}" alt="{{ title }}" class="w-full h-full object-cover">
     </div>
   {% endif %}
 
   {# コンテンツ #}
-  <div class="p-6">
+  <div class="ds-card-content">
     {% if title %}
-      <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ title }}</h3>
+      <h3 class="text-title-md font-semibold text-neutral-800 mb-2">{{ title }}</h3>
     {% endif %}
 
     {% if description %}
-      <p class="text-gray-600">{{ description }}</p>
+      <p class="text-body-md text-neutral-600">{{ description }}</p>
     {% endif %}
 
     {# カスタムコンテンツ（スロット） #}
@@ -60,7 +60,7 @@
 
   {# フッター #}
   {% if footer_content %}
-    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+    <div class="ds-card-footer">
       {{ footer_content|safe }}
     </div>
   {% endif %}

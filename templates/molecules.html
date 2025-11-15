@@ -5,15 +5,15 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Molecules コンポーネント</h1>
-        <p class="text-gray-600 mb-8">Atomsを組み合わせたMoleculesコンポーネントのカタログ</p>
+        <h1 class="text-display-md font-semibold text-neutral-900 mb-2">Molecules コンポーネント</h1>
+        <p class="text-body-md text-neutral-600 mb-8">Atomsを組み合わせたMoleculesコンポーネントのカタログ</p>
 
         <!-- フォームグループコンポーネント -->
         <section class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200">フォームグループ</h2>
+            <h2 class="text-title-md font-semibold text-neutral-800 mb-4 pb-2 border-b-2 border-surface-border">フォームグループ</h2>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">基本的なフォームグループ</h3>
+            <div class="ds-panel p-6 mb-6">
+                <h3 class="text-title-sm font-semibold text-neutral-700 mb-4">基本的なフォームグループ</h3>
                 <div class="space-y-6 max-w-md">
                     {% set label = "ユーザー名" %}
                     {% set name = "username" %}
@@ -39,8 +39,8 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">エラー状態のフォームグループ</h3>
+            <div class="ds-panel p-6 mb-6">
+                <h3 class="text-title-sm font-semibold text-neutral-700 mb-4">エラー状態のフォームグループ</h3>
                 <div class="space-y-6 max-w-md">
                     {% set label = "ユーザー名" %}
                     {% set name = "username_error" %}
@@ -52,8 +52,8 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">htmx デモ（リアルタイムフォーム送信）</h3>
+            <div class="ds-panel p-6 mb-6">
+                <h3 class="text-title-sm font-semibold text-neutral-700 mb-4">htmx デモ（リアルタイムフォーム送信）</h3>
                 <div id="form-demo-container">
                     <form class="space-y-6 max-w-md">
                         {% set label = "名前" %}
@@ -82,8 +82,8 @@
                         </div>
                     </form>
 
-                    <div id="form-result" class="mt-6 p-4 bg-gray-50 rounded-md min-h-[60px]">
-                        <p class="text-gray-500 italic">フォームを送信してください</p>
+                    <div id="form-result" class="mt-6 p-4 bg-surface-muted rounded-md min-h-[60px]">
+                        <p class="text-neutral-500 italic">フォームを送信してください</p>
                     </div>
                 </div>
             </div>
@@ -91,10 +91,10 @@
 
         <!-- カードコンポーネント -->
         <section class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200">カード</h2>
+            <h2 class="text-title-md font-semibold text-neutral-800 mb-4 pb-2 border-b-2 border-surface-border">カード</h2>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">基本的なカード</h3>
+            <div class="ds-panel p-6 mb-6">
+                <h3 class="text-title-sm font-semibold text-neutral-700 mb-4">基本的なカード</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% set title = "カードタイトル" %}
                     {% set description = "これはカードの説明文です。カードは情報をグループ化して表示するのに適しています。" %}
@@ -114,25 +114,25 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">フッター付きカード</h3>
+            <div class="ds-panel p-6 mb-6">
+                <h3 class="text-title-sm font-semibold text-neutral-700 mb-4">フッター付きカード</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {% set title = "アクション付きカード" %}
                     {% set description = "フッターにボタンやリンクを配置できます。" %}
                     {% set variant = "default" %}
                     {% set text_button = "詳細を見る" %}
-                    {% set footer_content = '<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">詳細を見る</button>' %}
+                    {% set footer_content = '<button class="ds-btn ds-btn-primary ds-btn-md">詳細を見る</button>' %}
                     {% include 'molecules/card.html' with context %}
 
                     {% set title = "複数アクション" %}
                     {% set description = "複数のアクションボタンを配置することもできます。" %}
-                    {% set footer_content = '<div class="flex gap-3"><button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">承認</button><button class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">キャンセル</button></div>' %}
+                    {% set footer_content = '<div class="flex gap-3"><button class="ds-btn ds-btn-primary ds-btn-sm">承認</button><button class="ds-btn ds-btn-secondary ds-btn-sm">キャンセル</button></div>' %}
                     {% include 'molecules/card.html' with context %}
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">htmx デモ（動的コンテンツ読み込み）</h3>
+            <div class="ds-panel p-6 mb-6">
+                <h3 class="text-title-sm font-semibold text-neutral-700 mb-4">htmx デモ（動的コンテンツ読み込み）</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% set title = "商品 A" %}
                     {% set description = "クリックして商品詳細を読み込む" %}
@@ -156,8 +156,8 @@
                     {% include 'molecules/card.html' with context %}
                 </div>
 
-                <div id="product-detail" class="mt-6 p-6 bg-gray-50 rounded-lg min-h-[120px]">
-                    <p class="text-gray-500 italic">カードをクリックして商品詳細を表示してください</p>
+                <div id="product-detail" class="mt-6 p-6 bg-surface-muted rounded-lg min-h-[120px]">
+                    <p class="text-neutral-500 italic">カードをクリックして商品詳細を表示してください</p>
                 </div>
             </div>
         </section>

@@ -19,6 +19,8 @@ instance/
 *.swp
 *.swo
 *~
+node_modules/
+dist/
 
 # OS
 .DS_Store

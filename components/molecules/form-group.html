@@ -21,7 +21,7 @@
 
 {% set id = id|default(name) %}
 
-<div class="form-group {{ class|default('') }}">
+<div class="ds-form-group {{ class|default('') }}">
   {# ラベル #}
   {% set text = label %}
   {% set for = id %}
@@ -32,6 +32,6 @@
 
   {# ヘルプテキスト #}
   {% if help_text and not error %}
-    <p class="mt-1 text-sm text-gray-500">{{ help_text }}</p>
+    <p class="ds-helper-text">{{ help_text }}</p>
   {% endif %}
 </div>

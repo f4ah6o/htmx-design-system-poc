@@ -17,17 +17,19 @@
 
 {# バリエーション別スタイル #}
 {% if variant == 'heading' %}
-  {% set variant_class = 'text-2xl font-bold text-gray-900' %}
+  {% set variant_class = 'text-display-md font-semibold text-neutral-800' %}
 {% elif variant == 'subheading' %}
-  {% set variant_class = 'text-xl font-semibold text-gray-800' %}
+  {% set variant_class = 'text-display-sm font-semibold text-neutral-700' %}
 {% elif variant == 'body' %}
-  {% set variant_class = 'text-base text-gray-700' %}
+  {% set variant_class = 'text-body-md text-neutral-700' %}
 {% elif variant == 'caption' %}
-  {% set variant_class = 'text-sm text-gray-500' %}
+  {% set variant_class = 'text-label-sm text-neutral-500' %}
 {% elif variant == 'error' %}
-  {% set variant_class = 'text-sm text-red-600' %}
+  {% set variant_class = 'text-label-sm text-intent-danger' %}
 {% elif variant == 'success' %}
-  {% set variant_class = 'text-sm text-green-600' %}
+  {% set variant_class = 'text-label-sm text-intent-success' %}
+{% else %}
+  {% set variant_class = 'text-body-md text-neutral-700' %}
 {% endif %}
 
 <p class="{{ variant_class }} {{ class|default('') }}">

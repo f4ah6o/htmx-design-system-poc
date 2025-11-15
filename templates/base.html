@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}htmx Design System PoC{% endblock %}</title>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind build -->
+    <link rel="stylesheet" href="/static/css/app.css">
 
     <!-- htmx -->
     <script src="https://unpkg.com/htmx.org@2.0.3"></script>
@@ -17,7 +17,7 @@
 
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-gray-50">
+<body class="ds-section-shell">
     <div class="min-h-screen">
         {% block content %}{% endblock %}
     </div>
